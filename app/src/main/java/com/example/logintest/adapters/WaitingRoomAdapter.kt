@@ -9,7 +9,7 @@ import android.widget.TextView
 import com.example.logintest.R
 import com.example.logintest.RoomResult
 
-class WaitingRoomAdapter(var context: Context, rooms: List<RoomResult>): BaseAdapter() {
+class  WaitingRoomAdapter(var context: Context, rooms: List<RoomResult>): BaseAdapter() {
     var rooms = rooms
     override fun getCount(): Int {
         return rooms.size
