@@ -56,7 +56,8 @@ class RoomActivity : AppCompatActivity() {
 
         var createBtn = findViewById<Button>(R.id.bt_create_room)
         createBtn.setOnClickListener {
-            CreateRoomDialogFragment()
+            val dialog = CreateRoomDialogFragment(retrofitInterface)
+            dialog.show(supportFragmentManager, "createRoomDialog")
         }
     }
 }

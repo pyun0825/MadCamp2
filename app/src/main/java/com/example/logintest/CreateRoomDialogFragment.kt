@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.DialogFragment
 
-class CreateRoomDialogFragment : DialogFragment() {
+class CreateRoomDialogFragment(var retrofitInterface: RetrofitInterface) : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
