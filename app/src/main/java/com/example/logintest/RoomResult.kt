@@ -1,5 +1,8 @@
 package com.example.logintest
 
 class RoomResult {
-    lateinit var roomtitle:String
+    var id:Int = 0
+    lateinit var name:String
+    var num_player:Int = 0
+    var cur_player:Int = 0
 }

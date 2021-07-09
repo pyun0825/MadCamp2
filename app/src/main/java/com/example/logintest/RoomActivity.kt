@@ -21,7 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RoomActivity : AppCompatActivity() {
     lateinit var retrofit: Retrofit
     lateinit var retrofitInterface: RetrofitInterface
-    var BASE_URL:String = "http://10.0.2.2:3000"
+    var BASE_URL:String = "http://143.248.226.140:3000"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,18 +45,24 @@ class RoomActivity : AppCompatActivity() {
                 call: Call<List<RoomResult>>,
                 response: Response<List<RoomResult>>
             ) {
-                rooms = response.body()!!
-                listView.adapter = WaitingRoomAdapter(this@RoomActivity, rooms)
+                if(response.code() == 200){
+                    rooms = response.body()!!
+                    listView.adapter = WaitingRoomAdapter(this@RoomActivity, rooms)
+                } else if(response.code() == 404){
+                    rooms = emptyList()
+                    System.out.println("No Rooms made!")
+                }
             }
 
             override fun onFailure(call: Call<List<RoomResult>>, t: Throwable) {
                 Toast.makeText(this@RoomActivity, t.message, Toast.LENGTH_LONG).show()
+                rooms = emptyList()
             }
         })
 
         var createBtn = findViewById<Button>(R.id.bt_create_room)
         createBtn.setOnClickListener {
-            val dialog = CreateRoomDialogFragment(retrofitInterface)
+            val dialog = CreateRoomDialogFragment(this@RoomActivity, retrofitInterface)
             dialog.show(supportFragmentManager, "createRoomDialog")
         }
     }

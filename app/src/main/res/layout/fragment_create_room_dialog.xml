@@ -21,7 +21,7 @@
 
     <EditText
         android:id="@+id/et_room_name"
-        android:layout_width="350dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
@@ -38,7 +38,7 @@
 
     <EditText
         android:id="@+id/et_room_num"
-        android:layout_width="350dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"

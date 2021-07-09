@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var retrofit: Retrofit
     lateinit var retrofitInterface: RetrofitInterface
-    var BASE_URL:String = "http://10.0.2.2:3000"
+    var BASE_URL:String = "http://143.248.226.140:3000"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

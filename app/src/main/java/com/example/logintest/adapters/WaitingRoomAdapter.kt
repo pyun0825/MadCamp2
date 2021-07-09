@@ -27,7 +27,8 @@ class WaitingRoomAdapter(var context: Context, rooms: List<RoomResult>): BaseAda
         val layoutInflater = LayoutInflater.from(context)
         val roomRow = layoutInflater.inflate(R.layout.waiting_room_item, parent, false)
         val roomTitle = roomRow.findViewById<TextView>(R.id.tv_room)
-        roomTitle.text = rooms[position].toString()
+        System.out.println(rooms)
+        roomTitle.text = rooms[position].name
         return roomRow
     }
 }
