@@ -21,7 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RoomActivity : AppCompatActivity() {
     lateinit var retrofit: Retrofit
     lateinit var retrofitInterface: RetrofitInterface
-    var BASE_URL:String = "http://192.249.18.140:443"
+    var BASE_URL:String = "http://143.248.226.140:3000"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

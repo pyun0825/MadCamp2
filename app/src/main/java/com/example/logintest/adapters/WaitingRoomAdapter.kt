@@ -29,6 +29,11 @@ class  WaitingRoomAdapter(var context: Context, rooms: List<RoomResult>): BaseAd
         val roomTitle = roomRow.findViewById<TextView>(R.id.tv_room)
         System.out.println(rooms)
         roomTitle.text = "No.${position+1}: "+rooms[position].name
+
+        roomRow.setOnClickListener {
+
+        }
+
         return roomRow
     }
 }
