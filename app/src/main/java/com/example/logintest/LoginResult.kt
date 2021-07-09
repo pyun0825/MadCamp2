@@ -6,5 +6,5 @@ class LoginResult {
 
     lateinit var name:String
 
-    lateinit var email:String
+    lateinit var game_id:String
 }

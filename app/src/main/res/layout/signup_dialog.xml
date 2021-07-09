@@ -15,8 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:hint="Enter email"
-        android:id="@+id/emailEdit"/>
+        android:hint="Enter id"
+        android:id="@+id/idEdit"/>
 
     <EditText
         android:layout_width="match_parent"

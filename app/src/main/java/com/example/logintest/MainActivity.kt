@@ -45,11 +45,11 @@ class MainActivity : AppCompatActivity() {
         var ad = builder.create()
         ad.show()
         var loginBtn = view.findViewById<Button>(R.id.login)
-        var emailEdit = view.findViewById<EditText>(R.id.emailEdit)
+        var idEdit = view.findViewById<EditText>(R.id.idEdit)
         var passwordEdit = view.findViewById<EditText>(R.id.passwordEdit)
         loginBtn.setOnClickListener {
             var map: HashMap<String,String> = HashMap()
-            map.put("email", emailEdit.text.toString())
+            map.put("game_id", idEdit.text.toString())
             map.put("password", passwordEdit.text.toString())
             var call: Call<LoginResult> = retrofitInterface.executeLogin(map)
             call.enqueue(object: Callback<LoginResult>{
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                             builder1.setTitle(result.name)
                         }
                         if (result != null) {
-                            builder1.setMessage(result.email)
+                            builder1.setMessage(result.game_id)
                         }
 
                         builder1.show()
@@ -91,12 +91,12 @@ class MainActivity : AppCompatActivity() {
         ad.show()
         var signupBtn = view.findViewById<Button>(R.id.signup)
         var nameEdit = view.findViewById<EditText>(R.id.nameEdit)
-        var emailEdit = view.findViewById<EditText>(R.id.emailEdit)
+        var idEdit = view.findViewById<EditText>(R.id.idEdit)
         var passwordEdit = view.findViewById<EditText>(R.id.passwordEdit)
         signupBtn.setOnClickListener {
             var map: HashMap<String,String> = HashMap()
             map.put("name", nameEdit.text.toString())
-            map.put("email", emailEdit.text.toString())
+            map.put("game_id", idEdit.text.toString())
             map.put("password", passwordEdit.text.toString())
             var call: Call<Void> = retrofitInterface.executeSignup(map)
             call.enqueue(object: Callback<Void>{

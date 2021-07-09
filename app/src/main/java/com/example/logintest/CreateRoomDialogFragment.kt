@@ -1,6 +1,7 @@
 package com.example.logintest
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -43,13 +44,17 @@ class CreateRoomDialogFragment(context: Context, var retrofitInterface: Retrofit
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if(response.code() == 200){
                         Toast.makeText(context, "Created Room", Toast.LENGTH_LONG).show()
+                        val intent = Intent(context, InnerRoomActivity::class.java)
+                        startActivity(intent)
                     } else if(response.code() == 400){
                         Toast.makeText(context, "Failed to create Room", Toast.LENGTH_LONG).show()
+                        dismiss()
                     }
                 }
 
                 override fun onFailure(call: Call<Void>, t: Throwable) {
                     Toast.makeText(context, t.message, Toast.LENGTH_LONG).show()
+                    dismiss()
                 }
             })
         }
