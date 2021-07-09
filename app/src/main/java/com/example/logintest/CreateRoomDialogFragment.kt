@@ -44,7 +44,9 @@ class CreateRoomDialogFragment(context: Context, var retrofitInterface: Retrofit
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if(response.code() == 200){
                         Toast.makeText(context, "Created Room", Toast.LENGTH_LONG).show()
-                        val intent = Intent(context, InnerRoomActivity::class.java)
+                        val intent = Intent(context, InnerRoomActivity::class.java).apply{
+                            putExtra("roomName", roomName.text.toString())
+                        }
                         startActivity(intent)
                     } else if(response.code() == 400){
                         Toast.makeText(context, "Failed to create Room", Toast.LENGTH_LONG).show()
