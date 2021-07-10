@@ -18,6 +18,9 @@ interface RetrofitInterface {
     @POST("/rooms")
     fun makeRoom(@Body map: HashMap<String, Any>) : Call<Void>
 
+    @POST("/update")
+    fun updateRoom(@Body map: HashMap<String, String>): Call<EnterRoomResult>
+
     @POST("/enter")
-    fun enterRoom(@Body map: HashMap<String, String>): Call<EnterRoomResult>
+    fun enterRoom(@Body map: HashMap<String, String>): Call<Void>
 }

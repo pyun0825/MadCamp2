@@ -49,7 +49,7 @@ class CreateRoomDialogFragment(context: Context, var retrofitInterface: Retrofit
                         }
                         startActivity(intent)
                     } else if(response.code() == 400){
-                        Toast.makeText(context, "Failed to create Room", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Room with equivalent name already exists!", Toast.LENGTH_LONG).show()
                         dismiss()
                     }
                 }

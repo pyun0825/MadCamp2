@@ -4,14 +4,9 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.logintest.adapters.WaitingRoomAdapter
-import com.example.logintest.databinding.ActivityRoomBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,11 +16,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RoomActivity : AppCompatActivity() {
     lateinit var retrofit: Retrofit
     lateinit var retrofitInterface: RetrofitInterface
-    var BASE_URL:String = "http://143.248.226.140:3000"
+    var BASE_URL:String = "http://143.248.226.23:3000"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room)
+
 
         retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -64,6 +60,34 @@ class RoomActivity : AppCompatActivity() {
         createBtn.setOnClickListener {
             val dialog = CreateRoomDialogFragment(this@RoomActivity, retrofitInterface)
             dialog.show(supportFragmentManager, "createRoomDialog")
+        }
+
+        var refreshLayout =findViewById<SwipeRefreshLayout>(R.id.rl_rooms)
+        refreshLayout.setOnRefreshListener {
+            var call = retrofitInterface.getRooms()
+
+            lateinit var rooms: List<RoomResult>
+
+            call.enqueue(object: Callback<List<RoomResult>>{
+                override fun onResponse(
+                    call: Call<List<RoomResult>>,
+                    response: Response<List<RoomResult>>
+                ) {
+                    if(response.code() == 200){
+                        rooms = response.body()!!
+                        listView.adapter = WaitingRoomAdapter(this@RoomActivity, rooms)
+                    } else if(response.code() == 404){
+                        rooms = emptyList()
+                        System.out.println("No Rooms made!")
+                    }
+                }
+
+                override fun onFailure(call: Call<List<RoomResult>>, t: Throwable) {
+                    Toast.makeText(this@RoomActivity, t.message, Toast.LENGTH_LONG).show()
+                    rooms = emptyList()
+                }
+            })
+            refreshLayout.isRefreshing = false
         }
     }
 }

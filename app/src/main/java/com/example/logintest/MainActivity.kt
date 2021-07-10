@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.model.User
 import retrofit2.Call
@@ -23,11 +24,12 @@ class MainActivity : AppCompatActivity() {
     lateinit var retrofit: Retrofit
     lateinit var retrofitInterface: RetrofitInterface
     lateinit var user: User
-    var BASE_URL:String = "http://143.248.226.140:3000"
+    var BASE_URL:String = "http://143.248.226.23:3000"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
