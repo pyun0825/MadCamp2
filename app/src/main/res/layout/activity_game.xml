@@ -8,126 +8,126 @@
     tools:context=".GameActivity">
 
     <ImageView
-        android:id="@+id/iv_Deck4"
+        android:id="@+id/imageView6"
         android:layout_width="100dp"
         android:layout_height="142dp"
         android:rotation="0"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_Deck2"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.49"
-        app:layout_constraintStart_toEndOf="@+id/iv_Open3"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:srcCompat="@drawable/card_empty" />
 
     <ImageView
-        android:id="@+id/iv_Deck2"
+        android:id="@+id/imageView4"
         android:layout_width="100dp"
         android:layout_height="142dp"
         android:layout_marginBottom="9dp"
         android:rotation="0"
-        app:layout_constraintBottom_toTopOf="@+id/iv_Open2"
-        app:layout_constraintEnd_toStartOf="@+id/iv_Open3"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintEnd_toStartOf="@+id/imageView2"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/card_empty" />
 
     <ImageView
-        android:id="@+id/iv_Deck3"
+        android:id="@+id/imageView5"
         android:layout_width="100dp"
         android:layout_height="142dp"
         android:rotation="0"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_Deck2"
-        app:layout_constraintEnd_toStartOf="@+id/iv_Open4"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintEnd_toStartOf="@+id/imageView3"
         app:layout_constraintHorizontal_bias="0.509"
-        app:layout_constraintStart_toEndOf="@+id/iv_Open2"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
         app:srcCompat="@drawable/card_empty" />
 
     <ImageView
-        android:id="@+id/iv_Open4"
+        android:id="@+id/imageView3"
         android:layout_width="100dp"
         android:layout_height="142dp"
         android:rotation="0"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_Open2"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/iv_Open3"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:srcCompat="@drawable/card_avocado_2" />
 
     <ImageView
-        android:id="@+id/iv_Open2"
+        android:id="@+id/imageView"
         android:layout_width="100dp"
         android:layout_height="142dp"
         android:rotation="0"
-        app:layout_constraintBottom_toTopOf="@+id/ib_bell"
-        app:layout_constraintEnd_toStartOf="@+id/iv_Open3"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton2"
+        app:layout_constraintEnd_toStartOf="@+id/imageView2"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/card_lemon_3" />
 
     <ImageView
-        android:id="@+id/iv_Open3"
+        android:id="@+id/imageView2"
         android:layout_width="100dp"
         android:layout_height="142dp"
         android:rotation="0"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_Open2"
-        app:layout_constraintEnd_toStartOf="@+id/iv_Open4"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toStartOf="@+id/imageView3"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/iv_Open2"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
         app:srcCompat="@drawable/card_grape_5" />
 
     <ImageButton
-        android:id="@+id/ib_bell"
+        android:id="@+id/imageButton2"
         android:layout_width="171dp"
         android:layout_height="123dp"
         android:background="#00000000"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/iv_DeckView"
+        app:layout_constraintBottom_toTopOf="@+id/imageView7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_Open2"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
         app:srcCompat="@drawable/bell" />
 
     <ImageView
-        android:id="@+id/iv_DeckView"
+        android:id="@+id/imageView7"
+        android:layout_width="100dp"
+        android:layout_height="142dp"
+        android:rotation="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView9"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton2"
+        app:srcCompat="@drawable/card_empty" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="100dp"
+        android:layout_height="142dp"
+        android:rotation="0"
+        app:layout_constraintBottom_toBottomOf="@id/imageView7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView9"
+        app:layout_constraintTop_toTopOf="@+id/imageView7"
+        app:srcCompat="@drawable/card_lemon_2" />
+
+    <ImageView
+        android:id="@+id/imageView10"
         android:layout_width="100dp"
         android:layout_height="142dp"
         android:onClick="onClickDraw"
         android:rotation="0"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/imageView7"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_myOpen"
-        app:layout_constraintTop_toBottomOf="@+id/ib_bell"
+        app:layout_constraintStart_toEndOf="@+id/imageView9"
+        app:layout_constraintTop_toTopOf="@+id/imageView7"
         app:srcCompat="@drawable/card_empty" />
 
     <ImageView
-        android:id="@+id/iv_myDeck"
-        android:layout_width="100dp"
-        android:layout_height="142dp"
-        android:rotation="0"
-        app:layout_constraintBottom_toBottomOf="@id/iv_DeckView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_myOpen"
-        app:layout_constraintTop_toTopOf="@+id/iv_DeckView"
-        app:srcCompat="@drawable/card_lemon_2" />
-
-    <ImageView
-        android:id="@+id/iv_drawCard"
-        android:layout_width="100dp"
-        android:layout_height="142dp"
-        android:rotation="0"
-        app:layout_constraintBottom_toBottomOf="@id/iv_DeckView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_myOpen"
-        app:layout_constraintTop_toTopOf="@+id/iv_DeckView"
-        app:srcCompat="@drawable/card_empty" />
-
-    <ImageView
-        android:id="@+id/iv_myOpen"
+        android:id="@+id/imageView9"
         android:layout_width="100dp"
         android:layout_height="142dp"
         android:rotation="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/iv_DeckView"
+        app:layout_constraintTop_toTopOf="@+id/imageView7"
         app:srcCompat="@drawable/card_lemon_2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

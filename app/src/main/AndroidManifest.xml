@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LogInTest"
         android:usesCleartextTraffic="true">
-        <activity android:name=".GameActivity"></activity>
+        <activity android:name=".MainActivity"></activity>
         <activity
             android:name=".InnerRoomActivity"
             android:label="@string/title_activity_inner_room"
@@ -22,7 +22,7 @@
             android:name=".RoomActivity"
             android:label="@string/title_activity_room"
             android:theme="@style/Theme.LogInTest.NoActionBar" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".GameActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
