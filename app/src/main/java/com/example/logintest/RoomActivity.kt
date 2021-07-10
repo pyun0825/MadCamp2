@@ -16,12 +16,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RoomActivity : AppCompatActivity() {
     lateinit var retrofit: Retrofit
     lateinit var retrofitInterface: RetrofitInterface
-    var BASE_URL:String = "http://143.248.226.23:3000"
+    lateinit var BASE_URL:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room)
-
+        BASE_URL = getString(R.string.ip_address)
 
         retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)

@@ -24,12 +24,13 @@ class MainActivity : AppCompatActivity() {
     lateinit var retrofit: Retrofit
     lateinit var retrofitInterface: RetrofitInterface
     lateinit var user: User
-    var BASE_URL:String = "http://143.248.226.23:3000"
+    lateinit var BASE_URL:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        BASE_URL = this.getString(R.string.ip_address)
 
         retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
