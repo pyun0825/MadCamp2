@@ -11,7 +11,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
-
 class GameActivity : AppCompatActivity() {
 
     var fanim: AnimatorSet = AnimatorSet()
@@ -20,18 +19,38 @@ class GameActivity : AppCompatActivity() {
     lateinit var front_card:View
     lateinit var to_card:View
     lateinit var draw_card:View
-
-//    var dpi:Int = 0
-//    var density:Float = 0f
+    lateinit var flip_card:View
+    lateinit var BASE_URL:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+
+        val mSocket = SocketHandler.getSocket()
+
+        val roomName = intent.getStringExtra("roomName")
+        val my_game_id = intent.getStringExtra("game_id")
+        val num_player = intent.getIntExtra("num_player", 0)
+
+        mSocket.emit("ready", roomName, num_player)
+
+        var scale:Float = applicationContext.resources.displayMetrics.density
+        fanim = AnimatorInflater.loadAnimator(applicationContext, R.animator.front_animator) as AnimatorSet
+        banim = AnimatorInflater.loadAnimator(applicationContext, R.animator.back_animator) as AnimatorSet
+        flip_card = findViewById(R.id.iv_myDeck)
+        draw_card = findViewById(R.id.iv_DeckView)
+        flip_card.bringToFront()
+        draw_card.bringToFront()
+
+        mSocket.on("start"){
+            System.out.println("Working!!!!!!!!!")
+        }
         back_card = findViewById(R.id.imageView7)
         front_card = findViewById(R.id.imageView8)
         to_card = findViewById(R.id.imageView9)
         draw_card = findViewById(R.id.imageView10)
     }
+
     fun onClickDraw(view: View) {
         front_card.bringToFront()
         back_card.bringToFront()

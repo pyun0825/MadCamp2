@@ -57,7 +57,6 @@ class InnerRoomActivity : AppCompatActivity() {
             }
         })
         mSocket.on("player join") {
-
             var call2 = retrofitInterface.updateRoom(map)
             call2.enqueue(object : Callback<EnterRoomResult> {
                 override fun onResponse(
@@ -81,6 +80,7 @@ class InnerRoomActivity : AppCompatActivity() {
                 putExtra("game_id", game_id)
                 putExtra("num_player", num_player)
             }
+            mSocket.off("to game")
             startActivity(intent)
         }
 
