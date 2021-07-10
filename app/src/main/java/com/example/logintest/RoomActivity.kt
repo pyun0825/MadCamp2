@@ -30,6 +30,8 @@ class RoomActivity : AppCompatActivity() {
 
         retrofitInterface = retrofit.create(RetrofitInterface::class.java)
 
+        val game_id = intent.getStringExtra("game_id")
+
         val listView = findViewById<ListView>(R.id.lv_rooms)
 
         var call = retrofitInterface.getRooms()
@@ -43,7 +45,7 @@ class RoomActivity : AppCompatActivity() {
             ) {
                 if(response.code() == 200){
                     rooms = response.body()!!
-                    listView.adapter = WaitingRoomAdapter(this@RoomActivity, rooms)
+                    listView.adapter = WaitingRoomAdapter(this@RoomActivity, rooms, game_id)
                 } else if(response.code() == 404){
                     rooms = emptyList()
                     System.out.println("No Rooms made!")
@@ -58,7 +60,7 @@ class RoomActivity : AppCompatActivity() {
 
         var createBtn = findViewById<Button>(R.id.bt_create_room)
         createBtn.setOnClickListener {
-            val dialog = CreateRoomDialogFragment(this@RoomActivity, retrofitInterface)
+            val dialog = CreateRoomDialogFragment(this@RoomActivity, retrofitInterface, game_id)
             dialog.show(supportFragmentManager, "createRoomDialog")
         }
 
@@ -75,7 +77,7 @@ class RoomActivity : AppCompatActivity() {
                 ) {
                     if(response.code() == 200){
                         rooms = response.body()!!
-                        listView.adapter = WaitingRoomAdapter(this@RoomActivity, rooms)
+                        listView.adapter = WaitingRoomAdapter(this@RoomActivity, rooms, game_id)
                     } else if(response.code() == 404){
                         rooms = emptyList()
                         System.out.println("No Rooms made!")

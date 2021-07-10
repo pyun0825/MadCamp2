@@ -31,6 +31,9 @@ class InnerRoomActivity : AppCompatActivity() {
         retrofitInterface = retrofit.create(RetrofitInterface::class.java)
 
         val roomName = intent.getStringExtra("roomName") as String
+        val game_id = intent.getStringExtra("game_id")
+        var num_player:Int = 0
+
         findViewById<TextView>(R.id.tv_inner_title).text = roomName
 
         SocketHandler.setSocket(BASE_URL)
@@ -38,7 +41,7 @@ class InnerRoomActivity : AppCompatActivity() {
 
         mSocket.connect()
 
-        mSocket.emit("join room", roomName)
+        mSocket.emit("join room", roomName, game_id)
 
 
         var map: HashMap<String, String> = HashMap()
@@ -62,6 +65,7 @@ class InnerRoomActivity : AppCompatActivity() {
                     response: Response<EnterRoomResult>
                 ) {
                     var result = response.body()
+                    num_player = result?.numPlayer!!
                     findViewById<TextView>(R.id.tv_numPlayer).text = "Players needed: "+result?.numPlayer.toString()
                     findViewById<TextView>(R.id.tv_curPlayer).text = "Current players: "+result?.curPlayer.toString()
                 }
@@ -72,7 +76,11 @@ class InnerRoomActivity : AppCompatActivity() {
             })
         }
         mSocket.on("to game"){
-            val intent = Intent(this@InnerRoomActivity, GameActivity::class.java)
+            val intent = Intent(this@InnerRoomActivity, GameActivity::class.java).apply {
+                putExtra("roomName", roomName)
+                putExtra("game_id", game_id)
+                putExtra("num_player", num_player)
+            }
             startActivity(intent)
         }
 

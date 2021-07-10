@@ -15,7 +15,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CreateRoomDialogFragment(context: Context, var retrofitInterface: RetrofitInterface) : DialogFragment() {
+class CreateRoomDialogFragment(context: Context, var retrofitInterface: RetrofitInterface, var game_id: String?) : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -46,6 +46,7 @@ class CreateRoomDialogFragment(context: Context, var retrofitInterface: Retrofit
                         Toast.makeText(context, "Created Room", Toast.LENGTH_LONG).show()
                         val intent = Intent(context, InnerRoomActivity::class.java).apply{
                             putExtra("roomName", roomName.text.toString())
+                            putExtra("game_id", game_id)
                         }
                         startActivity(intent)
                     } else if(response.code() == 400){

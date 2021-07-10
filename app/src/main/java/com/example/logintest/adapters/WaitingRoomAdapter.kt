@@ -12,7 +12,7 @@ import com.example.logintest.InnerRoomActivity
 import com.example.logintest.R
 import com.example.logintest.RoomResult
 
-class  WaitingRoomAdapter(var context: Context, rooms: List<RoomResult>): BaseAdapter() {
+class  WaitingRoomAdapter(var context: Context, rooms: List<RoomResult>, var game_id:String?): BaseAdapter() {
     var rooms = rooms
     override fun getCount(): Int {
         return rooms.size
@@ -35,6 +35,7 @@ class  WaitingRoomAdapter(var context: Context, rooms: List<RoomResult>): BaseAd
         roomRow.setOnClickListener {
             val intent = Intent(context, InnerRoomActivity::class.java).apply{
                 putExtra("roomName", rooms[position].name)
+                putExtra("game_id", game_id)
             }
             startActivity(context, intent, null)
         }

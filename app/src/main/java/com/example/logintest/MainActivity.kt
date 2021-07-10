@@ -76,7 +76,9 @@ class MainActivity : AppCompatActivity() {
 
                         builder1.show()
 
-                        val intent = Intent(this@MainActivity, RoomActivity::class.java)
+                        val intent = Intent(this@MainActivity, RoomActivity::class.java).apply {
+                            putExtra("game_id", result?.game_id)
+                        }
                         startActivity(intent)
 
                     } else if(response.code() == 400){
@@ -142,7 +144,9 @@ class MainActivity : AppCompatActivity() {
 
                                         builder1.show()
 
-                                        val intent = Intent(this@MainActivity, RoomActivity::class.java)
+                                        val intent = Intent(this@MainActivity, RoomActivity::class.java).apply{
+                                            putExtra("game_id", result?.game_id)
+                                        }
                                         startActivity(intent)
 
                                     } else if(response.code() == 400){
