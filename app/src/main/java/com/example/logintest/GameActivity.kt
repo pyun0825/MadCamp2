@@ -30,7 +30,7 @@ class GameActivity : AppCompatActivity() {
 
         val roomName = intent.getStringExtra("roomName")
         val my_game_id = intent.getStringExtra("game_id")
-        val num_player = intent.getIntExtra("num_player", 0)
+        var num_player = intent.getIntExtra("num_player", 0)
 
         mSocket.emit("ready", roomName, num_player)
 
@@ -42,8 +42,9 @@ class GameActivity : AppCompatActivity() {
         flip_card.bringToFront()
         draw_card.bringToFront()
 
-        mSocket.on("start"){
-            System.out.println("Working!!!!!!!!!")
+        mSocket.on("start") { arg ->
+            num_player = arg[0] as Int
+
         }
         back_card = findViewById(R.id.imageView7)
         front_card = findViewById(R.id.imageView8)
