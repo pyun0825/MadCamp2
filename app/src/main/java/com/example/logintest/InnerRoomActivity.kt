@@ -81,6 +81,7 @@ class InnerRoomActivity : AppCompatActivity() {
                 putExtra("num_player", num_player)
             }
             mSocket.off("to game")
+            print(SocketHandler.getSocket())
             startActivity(intent)
         }
 
