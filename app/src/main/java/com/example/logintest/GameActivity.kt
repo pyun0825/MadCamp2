@@ -19,18 +19,13 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
-        BASE_URL = getString(R.string.ip_address)
-
-        SocketHandler.setSocket(BASE_URL)
         val mSocket = SocketHandler.getSocket()
-
-        mSocket.connect()
 
         val roomName = intent.getStringExtra("roomName")
         val my_game_id = intent.getStringExtra("game_id")
         val num_player = intent.getIntExtra("num_player", 0)
 
-        mSocket.emit("ready", roomName, my_game_id, num_player)
+        mSocket.emit("ready", roomName, num_player)
 
         var scale:Float = applicationContext.resources.displayMetrics.density
         fanim = AnimatorInflater.loadAnimator(applicationContext, R.animator.front_animator) as AnimatorSet
@@ -40,7 +35,7 @@ class GameActivity : AppCompatActivity() {
         flip_card.bringToFront()
         draw_card.bringToFront()
 
-        mSocket.on("test"){
+        mSocket.on("start"){
             System.out.println("Working!!!!!!!!!")
         }
     }
