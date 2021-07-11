@@ -69,7 +69,7 @@ class GameActivity : AppCompatActivity() {
                 System.out.println("Fruit: ${fruit} Num: ${fruitNum} Player: ${turnPlayer}")
                 // 해당 플레이어 카드 draw
                 if(turnPlayer == my_game_id){
-                    mSocket.emit("bell")
+                    mSocket.emit("bell", my_game_id)
                 }
             }
         }
