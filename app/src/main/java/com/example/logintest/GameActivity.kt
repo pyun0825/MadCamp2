@@ -6,9 +6,11 @@ import android.animation.ValueAnimator
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+import androidx.core.graphics.drawable.toDrawable
 import org.json.JSONArray
 
 class GameActivity : AppCompatActivity() {
@@ -22,22 +24,31 @@ class GameActivity : AppCompatActivity() {
     var fanim4: AnimatorSet = AnimatorSet()
     var banim4: AnimatorSet = AnimatorSet()
     var started:Int = 0
-    lateinit var back_card: View
-    lateinit var front_card: View
-    lateinit var to_card: View
-    lateinit var from_card: View
-    lateinit var back_card2: View
-    lateinit var front_card2: View
-    lateinit var to_card2: View
-    lateinit var from_card2: View
-    lateinit var back_card3: View
-    lateinit var front_card3: View
-    lateinit var to_card3: View
-    lateinit var from_card3: View
-    lateinit var back_card4: View
-    lateinit var front_card4: View
-    lateinit var to_card4: View
-    lateinit var from_card4: View
+    var id_map = mutableMapOf<String, Int>()
+    var card_list = intArrayOf(R.drawable.card_apple_1, R.drawable.card_apple_2, R.drawable.card_apple_3, R.drawable.card_apple_4, R.drawable.card_apple_5
+        , R.drawable.card_avocado_1, R.drawable.card_avocado_2, R.drawable.card_avocado_3, R.drawable.card_avocado_4, R.drawable.card_avocado_5
+        , R.drawable.card_grape_1, R.drawable.card_grape_2, R.drawable.card_grape_3, R.drawable.card_grape_4, R.drawable.card_grape_5
+        , R.drawable.card_lemon_1, R.drawable.card_lemon_2, R.drawable.card_lemon_3, R.drawable.card_lemon_4, R.drawable.card_lemon_5)
+    lateinit var back_card: ImageView
+    lateinit var front_card: ImageView
+    lateinit var to_card: ImageView
+    lateinit var from_card: ImageView
+    lateinit var back_card2: ImageView
+    lateinit var front_card2: ImageView
+    lateinit var to_card2: ImageView
+    lateinit var from_card2: ImageView
+    lateinit var back_card3: ImageView
+    lateinit var front_card3: ImageView
+    lateinit var to_card3: ImageView
+    lateinit var from_card3: ImageView
+    lateinit var back_card4: ImageView
+    lateinit var front_card4: ImageView
+    lateinit var to_card4: ImageView
+    lateinit var from_card4: ImageView
+    var drawid: Int = R.drawable.card_lemon_2
+    var drawid2: Int = R.drawable.card_lemon_3
+    var drawid3: Int = R.drawable.card_grape_5
+    var drawid4: Int = R.drawable.card_avocado_2
     var N: Int = 3
     lateinit var BASE_URL: String
 
@@ -48,6 +59,7 @@ class GameActivity : AppCompatActivity() {
         val roomName = intent.getStringExtra("roomName")
         val my_game_id = intent.getStringExtra("game_id")
         var num_player = intent.getIntExtra("num_player", 0)
+        N = num_player
         var players: ArrayList<String> = ArrayList<String>()
         mSocket.emit("ready", roomName, num_player)
 
@@ -56,26 +68,85 @@ class GameActivity : AppCompatActivity() {
         }
         mSocket.on("initial turn"){ args->
             var jArray:JSONArray = args[0] as JSONArray
+            System.out.println(args)
+            System.out.println(jArray)
             Log.i("initial turn : ", "done")
             if(jArray != null){
-                for(i in 1 until jArray.length()){
+                for(i in 0 until jArray.length()){
                     players.add(jArray.getString(i))
                 }
             }
+            System.out.println(players)
+
+
+            for (i in 0 until N) {
+                id_map[players[i]] = i
+            }
+            val j:Int = id_map[my_game_id]!!
+            for (i in 0 until N) {
+                id_map[players[i]] = (i-j)%N
+            }
+            for (i in 0 until N) {
+                id_map[players[i]] = (i-j)%N
+            }
+
             //ImageView에 플레이어 할당
             System.out.println("ImageView에 플레이어 할당")
             mSocket.on("turn"){ args->
+                if (started==0) {
+                    setanim(fanim, banim, front_card, back_card, from_card, to_card, "Y")
+                    if (N==4) {
+                        setanim(fanim2, banim2, front_card2, back_card2, from_card2, to_card2, "X")
+                        setanim(fanim3, banim3, front_card3, back_card3, from_card3, to_card3, "X")
+                        setanim(fanim4, banim4, front_card4, back_card4, from_card4, to_card4, "X")
+                    } else {
+                        setanim(fanim2, banim2, front_card2, back_card2, from_card2, to_card2, "Y", -1)
+                        if (N==3) {
+                            setanim(fanim3, banim3, front_card3, back_card3, from_card3, to_card3, "Y")
+                        }
+                    }
+                    started = 1
+                }
                 var fruit:Int = args[0] as Int
                 var fruitNum:Int = args[1] as Int
                 var turnPlayer: String = args[2] as String
-                System.out.println("Fruit: ${fruit} Num: ${fruitNum} Player: ${turnPlayer}")
+                System.out.println("Fruit: ${fruit} Num: ${fruitNum} Player: ${turnPlayer} Playid: ${id_map[turnPlayer]}")
+                var turn_i:Int = id_map[turnPlayer]!!
+                runOnUiThread {
+                    if (turn_i == 1) {
+                        to_card.setImageResource(drawid)
+                        drawid = card_list[fruit * 5 + fruitNum]
+                        front_card.setImageResource(drawid)
+                        fanim.start()
+                        banim.start()
+                    } else if (turn_i == 2) {
+                        to_card2.setImageResource(drawid2)
+                        drawid2 = card_list[fruit * 5 + fruitNum]
+                        front_card2.setImageResource(drawid2)
+                        fanim2.start()
+                        banim2.start()
+                    } else if (turn_i == 3) {
+                        to_card3.setImageResource(drawid3)
+                        drawid3 = card_list[fruit * 5 + fruitNum]
+                        front_card3.setImageResource(drawid3)
+                        fanim3.start()
+                        banim3.start()
+                    } else if (turn_i == 4) {
+                        to_card4.setImageResource(drawid4)
+                        drawid4 = card_list[fruit * 5 + fruitNum]
+                        front_card4.setImageResource(drawid4)
+                        fanim4.start()
+                        banim4.start()
+                    }
+                }
+
+
                 // 해당 플레이어 카드 draw
                 if(turnPlayer == my_game_id){
                     mSocket.emit("bell", my_game_id)
                 }
             }
         }
-        N = num_player
 
         if (N==2) {
             setContentView(R.layout.activity_game_2)
@@ -120,6 +191,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     fun onRing(view: View) {
+        Toast.makeText(this, "Bell rang!", Toast.LENGTH_SHORT).show()
         if (started==1) {
             return
         }
