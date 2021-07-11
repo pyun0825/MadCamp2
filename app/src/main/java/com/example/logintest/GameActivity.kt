@@ -84,10 +84,10 @@ class GameActivity : AppCompatActivity() {
             }
             val j:Int = id_map[my_game_id]!!
             for (i in 0 until N) {
-                id_map[players[i]] = (i-j)%N
+                id_map[players[i]] = (i-j+N)%N
             }
             for (i in 0 until N) {
-                id_map[players[i]] = (i-j)%N
+                id_map[players[i]] = (i-j+N)%N
             }
 
             //ImageView에 플레이어 할당
@@ -110,28 +110,28 @@ class GameActivity : AppCompatActivity() {
                 var fruit:Int = args[0] as Int
                 var fruitNum:Int = args[1] as Int
                 var turnPlayer: String = args[2] as String
-                System.out.println("Fruit: ${fruit} Num: ${fruitNum} Player: ${turnPlayer} Playid: ${id_map[turnPlayer]}")
                 var turn_i:Int = id_map[turnPlayer]!!
+                System.out.println("Fruit: ${fruit} Num: ${fruitNum} Player: ${turnPlayer} Playid: ${turn_i}")
                 runOnUiThread {
-                    if (turn_i == 1) {
+                    if (turn_i == 0) {
                         to_card.setImageResource(drawid)
                         drawid = card_list[fruit * 5 + fruitNum]
                         front_card.setImageResource(drawid)
                         fanim.start()
                         banim.start()
-                    } else if (turn_i == 2) {
+                    } else if (turn_i == 1) {
                         to_card2.setImageResource(drawid2)
                         drawid2 = card_list[fruit * 5 + fruitNum]
                         front_card2.setImageResource(drawid2)
                         fanim2.start()
                         banim2.start()
-                    } else if (turn_i == 3) {
+                    } else if (turn_i == 2) {
                         to_card3.setImageResource(drawid3)
                         drawid3 = card_list[fruit * 5 + fruitNum]
                         front_card3.setImageResource(drawid3)
                         fanim3.start()
                         banim3.start()
-                    } else if (turn_i == 4) {
+                    } else if (turn_i == 3) {
                         to_card4.setImageResource(drawid4)
                         drawid4 = card_list[fruit * 5 + fruitNum]
                         front_card4.setImageResource(drawid4)
