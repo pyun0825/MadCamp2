@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+import org.json.JSONArray
 
 class GameActivity : AppCompatActivity() {
 
@@ -46,12 +47,31 @@ class GameActivity : AppCompatActivity() {
         val roomName = intent.getStringExtra("roomName")
         val my_game_id = intent.getStringExtra("game_id")
         var num_player = intent.getIntExtra("num_player", 0)
-
+        var players: ArrayList<String> = ArrayList<String>()
         mSocket.emit("ready", roomName, num_player)
 
-        mSocket.on("start") { arg ->
-            num_player = arg[0] as Int
-
+        mSocket.on("start") {
+            mSocket.emit("enlist", my_game_id)
+        }
+        mSocket.on("initial turn"){ args->
+            var jArray:JSONArray = args[0] as JSONArray
+            if(jArray != null){
+                for(i in 1 until jArray.length()){
+                    players.add(jArray.getString(i))
+                }
+            }
+            //ImageView에 플레이어 할당
+            System.out.println("ImageView에 플레이어 할당")
+            mSocket.on("turn"){ args->
+                var fruit:Int = args[0] as Int
+                var fruitNum:Int = args[1] as Int
+                var turnPlayer: String = args[2] as String
+                System.out.println("Fruit: ${fruit} Num: ${fruitNum} Player: ${turnPlayer}")
+                // 해당 플레이어 카드 draw
+                if(turnPlayer == my_game_id){
+                    mSocket.emit("bell")
+                }
+            }
         }
         N = num_player
 

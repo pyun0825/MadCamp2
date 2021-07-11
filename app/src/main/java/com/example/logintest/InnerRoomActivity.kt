@@ -41,8 +41,6 @@ class InnerRoomActivity : AppCompatActivity() {
 
         mSocket.connect()
 
-        mSocket.emit("join room", roomName, game_id)
-
 
         var map: HashMap<String, String> = HashMap()
         map.put("roomName", roomName)
@@ -56,6 +54,8 @@ class InnerRoomActivity : AppCompatActivity() {
                 System.out.println("Failed to Enter room")
             }
         })
+        mSocket.emit("join room", roomName, game_id)
+
         mSocket.on("player join") {
             var call2 = retrofitInterface.updateRoom(map)
             call2.enqueue(object : Callback<EnterRoomResult> {
