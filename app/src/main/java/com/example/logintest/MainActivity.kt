@@ -66,15 +66,6 @@ class MainActivity : AppCompatActivity() {
                     if(response.code()==200){
                         var result = response.body()
 
-                        var builder1 = AlertDialog.Builder(this@MainActivity)
-                        if (result != null) {
-                            builder1.setTitle(result.name)
-                        }
-                        if (result != null) {
-                            builder1.setMessage(result.game_id)
-                        }
-
-                        builder1.show()
 
                         val intent = Intent(this@MainActivity, RoomActivity::class.java).apply {
                             putExtra("game_id", result?.game_id)
@@ -133,16 +124,6 @@ class MainActivity : AppCompatActivity() {
                                 override fun onResponse(call: Call<LoginResult>, response: Response<LoginResult>) {
                                     if(response.code()==200){
                                         var result = response.body()
-
-                                        var builder1 = AlertDialog.Builder(this@MainActivity)
-                                        if (result != null) {
-                                            builder1.setTitle(result.name)
-                                        }
-                                        if (result != null) {
-                                            builder1.setMessage(result.game_id)
-                                        }
-
-                                        builder1.show()
 
                                         val intent = Intent(this@MainActivity, RoomActivity::class.java).apply{
                                             putExtra("game_id", result?.game_id)

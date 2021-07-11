@@ -12,6 +12,9 @@ interface RetrofitInterface {
     @POST("/signup")
     fun executeSignup(@Body map: HashMap<String, String>) : Call<Void>
 
+    @POST("/logout")
+    fun logOut(@Body map: HashMap<String, String>): Call<Void>
+
     @GET("/rooms")
     fun getRooms(): Call<List<RoomResult>>
 

@@ -17,6 +17,7 @@ class RoomActivity : AppCompatActivity() {
     lateinit var retrofit: Retrofit
     lateinit var retrofitInterface: RetrofitInterface
     lateinit var BASE_URL:String
+    lateinit var game_id:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +31,7 @@ class RoomActivity : AppCompatActivity() {
 
         retrofitInterface = retrofit.create(RetrofitInterface::class.java)
 
-        val game_id = intent.getStringExtra("game_id")
+        game_id = intent.getStringExtra("game_id").toString()
 
         val listView = findViewById<ListView>(R.id.lv_rooms)
 
@@ -57,6 +58,23 @@ class RoomActivity : AppCompatActivity() {
                 rooms = emptyList()
             }
         })
+
+        var logOutBtn = findViewById<Button>(R.id.bt_log_out)
+        logOutBtn.setOnClickListener {
+            var map:HashMap<String,String> = HashMap()
+            map.put("game_id", game_id)
+            var call = retrofitInterface.logOut(map)
+            call.enqueue(object: Callback<Void>{
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    System.out.println("Logging out")
+                    finish()
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    System.out.println("Error")
+                }
+            })
+        }
 
         var createBtn = findViewById<Button>(R.id.bt_create_room)
         createBtn.setOnClickListener {
@@ -91,5 +109,24 @@ class RoomActivity : AppCompatActivity() {
             })
             refreshLayout.isRefreshing = false
         }
+    }
+
+    override fun onBackPressed() {
+        var map:HashMap<String,String> = HashMap()
+        if (game_id != null) {
+            map.put("game_id", game_id)
+        }
+        var call = retrofitInterface.logOut(map)
+        call.enqueue(object: Callback<Void>{
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                System.out.println("Logging out")
+                finish()
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                System.out.println("Error")
+            }
+        })
+        finish()
     }
 }
