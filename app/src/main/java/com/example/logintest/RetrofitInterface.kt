@@ -23,4 +23,7 @@ interface RetrofitInterface {
 
     @POST("/enter")
     fun enterRoom(@Body map: HashMap<String, String>): Call<Void>
+
+    @POST("/exit")
+    fun exitRoom(@Body map: HashMap<String, String>): Call<Void>
 }

@@ -4,6 +4,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -55,6 +56,7 @@ class GameActivity : AppCompatActivity() {
         }
         mSocket.on("initial turn"){ args->
             var jArray:JSONArray = args[0] as JSONArray
+            Log.i("initial turn : ", "done")
             if(jArray != null){
                 for(i in 1 until jArray.length()){
                     players.add(jArray.getString(i))
@@ -135,25 +137,25 @@ class GameActivity : AppCompatActivity() {
         started = 1
     }
     fun onClickDraw(view: View) {
-        Toast.makeText(this, "Player 1 Draw!", Toast.LENGTH_SHORT).show()
+        if (started==1) {Toast.makeText(this, "Player 1 Draw!", Toast.LENGTH_SHORT).show()}
         fanim.start()
         banim.start()
     }
 
     fun onClickDraw2(view: View) {
-        Toast.makeText(this, "Player 2 Draw!", Toast.LENGTH_SHORT).show()
+        if (started==1) {Toast.makeText(this, "Player 2 Draw!", Toast.LENGTH_SHORT).show()}
         fanim2.start()
         banim2.start()
     }
 
     fun onClickDraw3(view: View) {
-        Toast.makeText(this, "Player 3 Draw!", Toast.LENGTH_SHORT).show()
+        if (started==1) {Toast.makeText(this, "Player 3 Draw!", Toast.LENGTH_SHORT).show()}
         fanim3.start()
         banim3.start()
     }
 
     fun onClickDraw4(view: View) {
-        Toast.makeText(this, "Player 4 Draw!", Toast.LENGTH_SHORT).show()
+        if (started==1) {Toast.makeText(this, "Player 4 Draw!", Toast.LENGTH_SHORT).show()}
         fanim4.start()
         banim4.start()
     }
