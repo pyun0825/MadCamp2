@@ -51,6 +51,7 @@ class InnerRoomActivity : AppCompatActivity() {
         mSocket.connect()
 
         map.put("roomName", roomName)
+        map.put("game_id", game_id)
         var call = retrofitInterface.enterRoom(map)
         call.enqueue(object: Callback<Void>{
             override fun onResponse(call: Call<Void>, response: Response<Void>) {

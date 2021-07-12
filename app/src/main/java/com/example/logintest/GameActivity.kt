@@ -63,9 +63,6 @@ class GameActivity : AppCompatActivity() {
         var players: ArrayList<String> = ArrayList<String>()
         mSocket.emit("ready", roomName, num_player)
 
-        mSocket.on("start") {
-            mSocket.emit("enlist", my_game_id)
-        }
         mSocket.on("initial turn"){ args->
             var jArray:JSONArray = args[0] as JSONArray
             System.out.println(args)
