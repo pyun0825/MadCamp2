@@ -61,7 +61,7 @@
         app:layout_constraintBottom_toTopOf="@id/ib_bell"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_stat2"
         app:srcCompat="@drawable/card_lemon_3" />
 
     <ImageView
@@ -85,12 +85,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/card_empty" />
 
+    <TextView
+        android:id="@+id/tv_stat2"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/lemon_milk"
+        android:gravity="center_vertical"
+        android:rotation="0"
+        android:text="ID : 1\nCards : 30"
+        android:textFontWeight="1000"
+
+        app:layout_constraintBottom_toTopOf="@+id/iv_Open2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_stat"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/lemon_milk"
+        android:gravity="center_vertical"
+        android:rotation="0"
+        android:text="ID : 2\nCards : 20"
+        android:textFontWeight="1000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_DeckView" />
+
     <ImageView
         android:id="@+id/iv_DeckView"
         android:layout_width="100dp"
         android:layout_height="142dp"
         android:rotation="0"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tv_stat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_myOpen"
         app:layout_constraintTop_toBottomOf="@id/ib_bell"

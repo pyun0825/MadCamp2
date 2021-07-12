@@ -11,17 +11,15 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.LogInTest"
+        android:theme="@style/Theme.LogInTest.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity android:name=".GameActivity" />
         <activity
             android:name=".InnerRoomActivity"
-            android:label="@string/title_activity_inner_room"
-            android:theme="@style/Theme.LogInTest.NoActionBar" />
+            android:label="@string/title_activity_inner_room" />
         <activity
             android:name=".RoomActivity"
-            android:label="@string/title_activity_room"
-            android:theme="@style/Theme.LogInTest.NoActionBar" />
+            android:label="@string/title_activity_room" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

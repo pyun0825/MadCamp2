@@ -8,6 +8,48 @@
     android:background="@color/white"
     tools:context=".GameActivity">
 
+    <TextView
+        android:id="@+id/tv_stat2"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/lemon_milk"
+        android:gravity="center_vertical"
+        android:rotation="0"
+        android:text="ID : 1\nCards : 30"
+        android:textFontWeight="1000"
+        app:layout_constraintBottom_toTopOf="@+id/iv_Open2"
+        app:layout_constraintEnd_toStartOf="@+id/tv_stat4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_stat4"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/lemon_milk"
+        android:gravity="center_vertical"
+        android:rotation="0"
+        android:text="ID : 1\nCards : 30"
+        android:textFontWeight="1000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_stat2"
+        app:layout_constraintTop_toTopOf="@+id/tv_stat2" />
+
+
+    <TextView
+        android:id="@+id/tv_stat"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/lemon_milk"
+        android:gravity="center_vertical"
+        android:rotation="0"
+        android:text="ID : 1\nCards : 30"
+        android:textFontWeight="1000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_DeckView" />
+
     <ImageView
         android:id="@+id/iv_drawCard3"
         android:layout_width="100dp"
@@ -76,9 +118,10 @@
         android:layout_width="100dp"
         android:layout_height="142dp"
         android:rotation="0"
-        app:layout_constraintBottom_toBottomOf="@id/iv_Open2"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_Open2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/iv_Open2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/iv_Open2"
         app:srcCompat="@drawable/card_grape_5" />
 
     <ImageView
@@ -86,11 +129,11 @@
         android:layout_width="100dp"
         android:layout_height="142dp"
         android:rotation="0"
-        app:layout_constraintBottom_toTopOf="@id/ib_bell"
-        app:layout_constraintEnd_toStartOf="@id/iv_Open3"
+        app:layout_constraintBottom_toTopOf="@+id/ib_bell"
+        app:layout_constraintEnd_toStartOf="@+id/iv_Open3"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_stat4"
         app:srcCompat="@drawable/card_lemon_3" />
 
     <ImageView
@@ -128,10 +171,10 @@
         android:layout_width="100dp"
         android:layout_height="142dp"
         android:rotation="0"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tv_stat"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/iv_myOpen"
-        app:layout_constraintTop_toBottomOf="@id/ib_bell"
+        app:layout_constraintStart_toEndOf="@+id/iv_myOpen"
+        app:layout_constraintTop_toBottomOf="@+id/ib_bell"
         app:srcCompat="@drawable/card_empty" />
 
     <ImageButton
@@ -141,11 +184,10 @@
         android:background="#00000000"
         android:onClick="onRing"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@id/iv_DeckView"
+        app:layout_constraintBottom_toTopOf="@+id/iv_DeckView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_Open2"
+        app:layout_constraintTop_toBottomOf="@+id/iv_Open2"
         app:srcCompat="@drawable/bell" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

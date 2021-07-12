@@ -9,7 +9,7 @@ const url = 'mongodb://localhost:27017';
 
 app.use(express.json());
 
-const server = app.listen(3000, () => {
+const server = app.listen(443, () => {
     console.log("Listening on port 443....");
 });
 
@@ -151,6 +151,13 @@ mongoClient.connect(url, (err, db) => {
                             console.log(opencards);
                             if(isFive(opencards)){
                                 io.to(roomName).emit('turn', flipCard.fruit, flipCard.num, player_list[turn], 1);
+                                const query = {name: roomName};
+                                collection2.findOne(query, (err, result)=>{
+                                    const newValue = {
+                                        $set: {time_gap : {}}//
+                                    };
+                                    collection2.updateOne(query, newValue);
+                                });
                                 console.log("Waiting for bell");
                             } else{
                                 io.to(roomName).emit('turn', flipCard.fruit, flipCard.num, player_list[turn], 0);
@@ -158,8 +165,24 @@ mongoClient.connect(url, (err, db) => {
                             turn = (turn+1)%num_player;
                             test++;//
                             await timer(2000);
-                            //카드 재배치
-                            //파산유무?
+                            const query = {name: roomName};
+                            if(isFive(opencards)){
+                                collection2.findOne(query, (err, result)=>{
+                                    time_gap_map = result.time_gap
+                                    let fastest = null
+                                    for (var player in time_gap_map) {
+                                        if (fastest == null) {
+                                            fastest = player
+                                        }
+                                        else if (time_gap_map[player] < time_gap_map[fastest]) {
+                                            fastest = player
+                                        }
+                                    }
+                                    console.log("player "+fastest+" was the fastest")
+                                    io.to(roomName).emit('turnend', fastest);
+                                });
+                            }
+                            await timer(1000);
                         };
                     }, 3000);
                 };
@@ -172,6 +195,15 @@ mongoClient.connect(url, (err, db) => {
             });
             socket.on('ringbell', (arg1, arg2, arg3)=>{
                 console.log('player '+arg2+' rang the bell. Time gap: '+arg3);
+                const query = {name: arg1};
+                collection2.findOne(query, (err, result)=>{
+                    time_gap_map = result.time_gap
+                    time_gap_map[arg2] = arg3
+                    const newValue = {
+                        $set: {time_gap : time_gap_map}//
+                    };
+                    collection2.updateOne(query, newValue);
+                });
 
             });
         });
@@ -257,7 +289,8 @@ mongoClient.connect(url, (err, db) => {
                         name: req.body.name,
                         num_player: req.body.num_player,
                         cur_player: 0,
-                        player_list: []
+                        player_list: [],
+                        time_gap: {}
                     };
                     const newGame = {
                         name: req.body.name,

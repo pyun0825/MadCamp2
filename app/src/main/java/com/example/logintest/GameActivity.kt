@@ -32,7 +32,10 @@ class GameActivity : AppCompatActivity() {
     var fruit = 0
     var turnPlayer = ""
     var turn_i = 0
+    var fastest = ""
     var start_time: Long = 0
+    var dt: Long = 0
+    var emitted: Int = 0
     var id_map = mutableMapOf<String, Int>()
     var card_list = intArrayOf(R.drawable.card_apple_1, R.drawable.card_apple_2, R.drawable.card_apple_3, R.drawable.card_apple_4, R.drawable.card_apple_5
         , R.drawable.card_avocado_1, R.drawable.card_avocado_2, R.drawable.card_avocado_3, R.drawable.card_avocado_4, R.drawable.card_avocado_5
@@ -118,6 +121,7 @@ class GameActivity : AppCompatActivity() {
                 turnPlayer = args[2] as String
                 is_five = args[3] as Int
                 turn_i = id_map[turnPlayer] as Int
+                emitted = 0
                 System.out.println("Fruit: ${fruit} Num: ${fruitNum} Player: ${turnPlayer} Playid: ${turn_i}")
                 runOnUiThread {
                     if (turn_i == 0) {
@@ -153,6 +157,16 @@ class GameActivity : AppCompatActivity() {
 //                if(turnPlayer == my_game_id){
 //                    mSocket.emit("bell", my_game_id)
 //                }
+            }
+            mSocket.on("turnend") { args ->
+                runOnUiThread {
+                    if (args[0] == null) {
+                        Toast.makeText(this, "Nobody rang the bell.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        fastest = args[0] as String
+                        Toast.makeText(this, "Player ${fastest} was the fastest!", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
 
@@ -199,11 +213,26 @@ class GameActivity : AppCompatActivity() {
     }
 
     fun onRing(view: View) {
-        Toast.makeText(this, "Player ${my_game_id} rang the bell!", Toast.LENGTH_SHORT).show()
         if (is_five==1) {
+            dt = currentTimeMillis() - start_time
+            if (dt<300) {
+                wrongRing()
+            }
+            if (emitted == 0) {
+                Toast.makeText(this, "Player ${my_game_id} rang the bell!", Toast.LENGTH_SHORT).show()
+            }
+            emitted = 1
             mSocket.emit("ringbell", roomName, my_game_id, currentTimeMillis() - start_time)
+            is_five = 0
+        } else {
+            wrongRing()
         }
     }
+
+    fun wrongRing() {
+
+    }
+
     fun onClickDraw(view: View) {
         if (started==1) {Toast.makeText(this, "Player 1 Draw!", Toast.LENGTH_SHORT).show()}
         fanim.start()
