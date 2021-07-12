@@ -38,7 +38,8 @@ class GameActivity : AppCompatActivity() {
     var dt: Long = 0
     var emitted: Int = 0
     var id_map = mutableMapOf<String, Int>()
-    var numcards = intArrayOf(0, 0, 0, 0)
+    var num_open_cards = intArrayOf(0, 0, 0, 0)
+    var num_close_cards = intArrayOf(0, 0, 0, 0)
     var card_list = intArrayOf(R.drawable.card_apple_1, R.drawable.card_apple_2, R.drawable.card_apple_3, R.drawable.card_apple_4, R.drawable.card_apple_5
         , R.drawable.card_avocado_1, R.drawable.card_avocado_2, R.drawable.card_avocado_3, R.drawable.card_avocado_4, R.drawable.card_avocado_5
         , R.drawable.card_grape_1, R.drawable.card_grape_2, R.drawable.card_grape_3, R.drawable.card_grape_4, R.drawable.card_grape_5
@@ -149,7 +150,8 @@ class GameActivity : AppCompatActivity() {
                 turn_i = id_map[turnPlayer] as Int
                 emitted = 0
                 System.out.println("Fruit: ${fruit} Num: ${fruitNum} Player: ${turnPlayer} Playid: ${turn_i}")
-                numcards[turn_i]--
+                num_close_cards[turn_i]--
+                num_open_cards[turn_i]++
                 updateText()
                 runOnUiThread {
                     if (turn_i == 0) {
@@ -193,6 +195,12 @@ class GameActivity : AppCompatActivity() {
                     } else {
                         fastest = args[0] as String
                         Toast.makeText(this, "Player ${fastest} was the fastest!", Toast.LENGTH_SHORT).show()
+                        var j:Int = id_map[fastest]!!
+                        for (i in 0 until N) {
+                            num_close_cards[j] += num_open_cards[i]
+                            num_open_cards[i] = 0
+                        }
+                        updateText()
                     }
                 }
             }
@@ -231,7 +239,7 @@ class GameActivity : AppCompatActivity() {
                 from_card4 = findViewById(R.id.iv_drawCard4)!!
                 to_card4 = findViewById(R.id.iv_Open4)!!
                 to_card4.visibility = View.INVISIBLE
-                tv_stat4 = findViewById(R.id.tv_stat3)!!
+                tv_stat4 = findViewById(R.id.tv_stat4)!!
             }
         }
         front_card.bringToFront()
@@ -358,13 +366,13 @@ class GameActivity : AppCompatActivity() {
             var j:Int = id_map[i]!!
             if (j==0) {
                 System.out.println(dArray)
-                numcards[0] = dArray.getJSONObject(i).getInt("notOpen")
+                num_close_cards[0] = dArray.getJSONObject(i).getInt("notOpen")
             } else if (j==1) {
-                numcards[1] = dArray.getJSONObject(i).getInt("notOpen")
+                num_close_cards[1] = dArray.getJSONObject(i).getInt("notOpen")
             } else if (j==2) {
-                numcards[2] = dArray.getJSONObject(i).getInt("notOpen")
+                num_close_cards[2] = dArray.getJSONObject(i).getInt("notOpen")
             } else if (j==3) {
-                numcards[3] = dArray.getJSONObject(i).getInt("notOpen")
+                num_close_cards[3] = dArray.getJSONObject(i).getInt("notOpen")
             }
         }
         updateText()
@@ -374,13 +382,13 @@ class GameActivity : AppCompatActivity() {
         for (i in players) {
             var j: Int = id_map[i]!!
             if (j == 0) {
-                tv_stat.setText("ID: ${i}\nCARDS: ${numcards[0]}")
+                tv_stat.setText("ID: ${i}\nCARDS: ${num_close_cards[0]}")
             } else if (j == 1) {
-                tv_stat2.setText("ID: ${i}\nCARDS: ${numcards[1]}")
+                tv_stat2.setText("ID: ${i}\nCARDS: ${num_close_cards[1]}")
             } else if (j == 2) {
-                tv_stat3.setText("ID: ${i}\nCARDS: ${numcards[2]}")
+                tv_stat3.setText("ID: ${i}\nCARDS: ${num_close_cards[2]}")
             } else if (j == 3) {
-                tv_stat4.setText("ID: ${i}\nCARDS: ${numcards[3]}")
+                tv_stat4.setText("ID: ${i}\nCARDS: ${num_close_cards[3]}")
             }
         }
     }
