@@ -360,13 +360,13 @@ class GameActivity : AppCompatActivity() {
             var j:Int = id_map[i]!!
             if (j==0) {
                 System.out.println(dArray)
-                numcards[0] = dArray.getJSONObject("1").getInt("notOpen")
+                numcards[0] = dArray.getJSONObject(i).getInt("notOpen")
             } else if (j==1) {
-                numcards[1] = dArray.getJSONObject("2").getInt("notOpen")
+                numcards[1] = dArray.getJSONObject(i).getInt("notOpen")
             } else if (j==2) {
-                numcards[2] = dArray.getJSONObject("3").getInt("notOpen")
+                numcards[2] = dArray.getJSONObject(i).getInt("notOpen")
             } else if (j==3) {
-                numcards[3] = dArray.getJSONObject("4").getInt("notOpen")
+                numcards[3] = dArray.getJSONObject(i).getInt("notOpen")
             }
         }
         updateText()
