@@ -3,6 +3,7 @@ package com.example.logintest
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -65,9 +66,15 @@ class GameActivity : AppCompatActivity() {
     var drawid4: Int = R.drawable.card_avocado_2
     var N: Int = 3
     var is_five: Int = 0
+    lateinit var mediaPlayer1:MediaPlayer
+    lateinit var mediaPlayer2:MediaPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        mediaPlayer1 = MediaPlayer.create(this, R.raw.yes_five)
+        mediaPlayer2 = MediaPlayer.create(this, R.raw.not_five)
+
         mSocket = SocketHandler.getSocket()
 
         roomName = intent.getStringExtra("roomName") as String
@@ -224,8 +231,10 @@ class GameActivity : AppCompatActivity() {
             emitted = 1
             mSocket.emit("ringbell", roomName, my_game_id, currentTimeMillis() - start_time)
             is_five = 0
+            mediaPlayer1.start()
         } else {
             wrongRing()
+            mediaPlayer2.start()
         }
     }
 
