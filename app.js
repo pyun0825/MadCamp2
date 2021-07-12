@@ -9,7 +9,7 @@ const url = 'mongodb://localhost:27017';
 
 app.use(express.json());
 
-const server = app.listen(443, () => {
+const server = app.listen(3000, () => {
     console.log("Listening on port 443....");
 });
 
@@ -100,6 +100,7 @@ mongoClient.connect(url, (err, db) => {
         const myDb = db.db('HalliGalliDB');
         const collection = myDb.collection('Users');
         const collection2 = myDb.collection('Rooms');
+        const collection3 = myDb.collection('Games');
 
         io.on('connection', (socket) => {
             console.log('User connected '+socket.id);
@@ -112,13 +113,21 @@ mongoClient.connect(url, (err, db) => {
             socket.once('ready', (arg1,arg2)=>{
                 const roomName = arg1;
                 const num_player = arg2;
-                console.log(arg2)
+                console.log(arg2);
                 count++;
                 console.log("Socket: "+socket.nickname+" Count: ",count);
                 if(count == num_player){
                     var player_list;
                     collection2.findOne({name: roomName}, (err, result)=>{
                         player_list = result.player_list;
+                        for(i in player_list){
+                            var player = player_list[i];
+                            var newDeck;
+                            const update = {
+                                $set: {[`deck.${player}.notOpen`]: 56/num_player, [`deck.${player}.Open`]: 0}
+                            };
+                            collection3.updateOne({name: roomName}, update);
+                        };
                     });
                     console.log("emitting test");
                     count = 0;
@@ -137,6 +146,7 @@ mongoClient.connect(url, (err, db) => {
                         while(test < 56){
                             var flipCard = randCard(cards);
                             addToOpen(opencards, num_player, flipCard);
+                            collection3.updateOne({name: roomName}, { $inc: { [`deck.${player_list[turn]}.notOpen`]: -1, [`deck.${player_list[turn]}.Open`]: 1} })
                             console.log("Player: "+player_list[turn]);
                             console.log(opencards);
                             if(isFive(opencards)){
@@ -148,6 +158,8 @@ mongoClient.connect(url, (err, db) => {
                             turn = (turn+1)%num_player;
                             test++;//
                             await timer(2000);
+                            //카드 재배치
+                            //파산유무?
                         };
                     }, 3000);
                 };
@@ -159,7 +171,7 @@ mongoClient.connect(url, (err, db) => {
                 socket.leave(arg1);
             });
             socket.on('ringbell', (arg1, arg2, arg3)=>{
-                console.log('player '+arg2+' rang the bell. Time gap: '+arg3)
+                console.log('player '+arg2+' rang the bell. Time gap: '+arg3);
 
             });
         });
@@ -247,10 +259,16 @@ mongoClient.connect(url, (err, db) => {
                         cur_player: 0,
                         player_list: []
                     };
+                    const newGame = {
+                        name: req.body.name,
+                        deck: {}
+                    };
+                    collection3.insertOne(newGame, (err, result)=>{});
                     collection2.insertOne(newRoom, (err, result)=>{
                         res.status(200).send();
                         console.log('room added to db');
                     });
+
                 } else {
                     console.log("Room Exists");
                     res.status(400).send();
