@@ -11,7 +11,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
 import androidx.core.graphics.drawable.toDrawable
+import io.socket.client.Socket
 import org.json.JSONArray
+import java.lang.System.currentTimeMillis
 
 class GameActivity : AppCompatActivity() {
 
@@ -23,7 +25,14 @@ class GameActivity : AppCompatActivity() {
     var banim3: AnimatorSet = AnimatorSet()
     var fanim4: AnimatorSet = AnimatorSet()
     var banim4: AnimatorSet = AnimatorSet()
-    var started:Int = 0
+    var roomName = ""
+    var my_game_id = ""
+    var started = 0
+    var fruitNum = 0
+    var fruit = 0
+    var turnPlayer = ""
+    var turn_i = 0
+    var start_time: Long = 0
     var id_map = mutableMapOf<String, Int>()
     var card_list = intArrayOf(R.drawable.card_apple_1, R.drawable.card_apple_2, R.drawable.card_apple_3, R.drawable.card_apple_4, R.drawable.card_apple_5
         , R.drawable.card_avocado_1, R.drawable.card_avocado_2, R.drawable.card_avocado_3, R.drawable.card_avocado_4, R.drawable.card_avocado_5
@@ -45,23 +54,24 @@ class GameActivity : AppCompatActivity() {
     lateinit var front_card4: ImageView
     lateinit var to_card4: ImageView
     lateinit var from_card4: ImageView
+    lateinit var BASE_URL: String
+    lateinit var mSocket: Socket
     var drawid: Int = R.drawable.card_lemon_2
     var drawid2: Int = R.drawable.card_lemon_3
     var drawid3: Int = R.drawable.card_grape_5
     var drawid4: Int = R.drawable.card_avocado_2
     var N: Int = 3
-    lateinit var BASE_URL: String
+    var is_five: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val mSocket = SocketHandler.getSocket()
+        mSocket = SocketHandler.getSocket()
 
-        val roomName = intent.getStringExtra("roomName")
-        val my_game_id = intent.getStringExtra("game_id")
-        var num_player = intent.getIntExtra("num_player", 0)
-        N = num_player
+        roomName = intent.getStringExtra("roomName") as String
+        my_game_id = intent.getStringExtra("game_id") as String
+        N = intent.getIntExtra("num_player", 0)
         var players: ArrayList<String> = ArrayList<String>()
-        mSocket.emit("ready", roomName, num_player)
+        mSocket.emit("ready", roomName, N)
 
         mSocket.on("initial turn"){ args->
             var jArray:JSONArray = args[0] as JSONArray
@@ -74,7 +84,6 @@ class GameActivity : AppCompatActivity() {
                 }
             }
             System.out.println(players)
-
 
             for (i in 0 until N) {
                 id_map[players[i]] = i
@@ -104,10 +113,11 @@ class GameActivity : AppCompatActivity() {
                     }
                     started = 1
                 }
-                var fruit:Int = args[0] as Int
-                var fruitNum:Int = args[1] as Int
-                var turnPlayer: String = args[2] as String
-                var turn_i:Int = id_map[turnPlayer]!!
+                fruit = args[0] as Int
+                fruitNum = args[1] as Int
+                turnPlayer = args[2] as String
+                is_five = args[3] as Int
+                turn_i = id_map[turnPlayer] as Int
                 System.out.println("Fruit: ${fruit} Num: ${fruitNum} Player: ${turnPlayer} Playid: ${turn_i}")
                 runOnUiThread {
                     if (turn_i == 0) {
@@ -136,12 +146,13 @@ class GameActivity : AppCompatActivity() {
                         banim4.start()
                     }
                 }
+                start_time = currentTimeMillis()
 
 
                 // 해당 플레이어 카드 draw
-                if(turnPlayer == my_game_id){
-                    mSocket.emit("bell", my_game_id)
-                }
+//                if(turnPlayer == my_game_id){
+//                    mSocket.emit("bell", my_game_id)
+//                }
             }
         }
 
@@ -188,22 +199,10 @@ class GameActivity : AppCompatActivity() {
     }
 
     fun onRing(view: View) {
-        Toast.makeText(this, "Bell rang!", Toast.LENGTH_SHORT).show()
-        if (started==1) {
-            return
+        Toast.makeText(this, "Player ${my_game_id} rang the bell!", Toast.LENGTH_SHORT).show()
+        if (is_five==1) {
+            mSocket.emit("ringbell", roomName, my_game_id, currentTimeMillis() - start_time)
         }
-        setanim(fanim, banim, front_card, back_card, from_card, to_card, "Y")
-        if (N==4) {
-            setanim(fanim2, banim2, front_card2, back_card2, from_card2, to_card2, "X")
-            setanim(fanim3, banim3, front_card3, back_card3, from_card3, to_card3, "X")
-            setanim(fanim4, banim4, front_card4, back_card4, from_card4, to_card4, "X")
-        } else {
-            setanim(fanim2, banim2, front_card2, back_card2, from_card2, to_card2, "Y", -1)
-            if (N==3) {
-                setanim(fanim3, banim3, front_card3, back_card3, from_card3, to_card3, "Y")
-            }
-        }
-        started = 1
     }
     fun onClickDraw(view: View) {
         if (started==1) {Toast.makeText(this, "Player 1 Draw!", Toast.LENGTH_SHORT).show()}

@@ -9,8 +9,8 @@ const url = 'mongodb://localhost:27017';
 
 app.use(express.json());
 
-const server = app.listen(3000, () => {
-    console.log("Listening on port 3000....");
+const server = app.listen(443, () => {
+    console.log("Listening on port 443....");
 });
 
 const io = socket(server);
@@ -18,7 +18,7 @@ const io = socket(server);
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min; //ÃÖ´ñ°ªµµ Æ÷ÇÔ, ÃÖ¼Ú°ªµµ Æ÷ÇÔ
+    return Math.floor(Math.random() * (max - min + 1)) + min; //ìµœëŒ“ê°’ë„ í¬í•¨, ìµœì†Ÿê°’ë„ í¬í•¨
   }
 
 function randCard(deck){
@@ -89,7 +89,6 @@ function isFive(opencards){
 
 const timer = ms => new Promise(res => setTimeout(res, ms));
 var count = 0;
-var whoRang = [];
 
 
 mongoClient.connect(url, (err, db) => {
@@ -97,14 +96,14 @@ mongoClient.connect(url, (err, db) => {
         console.log("Error while connecting mongo client");
     } else{
         console.log("Connected to mongo client");
-        
+
         const myDb = db.db('HalliGalliDB');
         const collection = myDb.collection('Users');
         const collection2 = myDb.collection('Rooms');
 
         io.on('connection', (socket) => {
-            console.log('User connected '+socket.id);   
-            
+            console.log('User connected '+socket.id);
+
             socket.on("join room", async (arg1, arg2) => {
                 socket.nickname = arg2;
                 socket.join(arg1);
@@ -143,10 +142,6 @@ mongoClient.connect(url, (err, db) => {
                             if(isFive(opencards)){
                                 io.to(roomName).emit('turn', flipCard.fruit, flipCard.num, player_list[turn], 1);
                                 console.log("Waiting for bell");
-                                socket.once('bell',(arg1)=>{
-                                   var winner = arg1; 
-                                   console.log("Bell Rang", arg1);
-                                });
                             } else{
                                 io.to(roomName).emit('turn', flipCard.fruit, flipCard.num, player_list[turn], 0);
                             };
@@ -162,7 +157,10 @@ mongoClient.connect(url, (err, db) => {
                 console.log("Socket: "+socket.nickname+" Count: ",count);
                 io.to(arg1).emit('player exit');
                 socket.leave(arg1);
-                
+            });
+            socket.on('ringbell', (arg1, arg2, arg3)=>{
+                console.log('player '+arg2+' rang the bell. Time gap: '+arg3)
+
             });
         });
         app.post('/signup', (req, res)=>{
@@ -203,7 +201,7 @@ mongoClient.connect(url, (err, db) => {
                     };
                     console.log("send200")
                     const newValue = {
-                        $set: {logged_in: 1}
+                        $set: {logged_in: 0}//
                     };
                     collection.updateOne(query, newValue);
                     res.status(200).send(JSON.stringify(objToSend));
