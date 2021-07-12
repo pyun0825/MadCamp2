@@ -11,8 +11,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
-import androidx.core.graphics.drawable.toDrawable
 import io.socket.client.Socket
 import org.json.JSONArray
 import org.json.JSONObject
@@ -233,7 +231,7 @@ class GameActivity : AppCompatActivity() {
                 from_card4 = findViewById(R.id.iv_drawCard4)!!
                 to_card4 = findViewById(R.id.iv_Open4)!!
                 to_card4.visibility = View.INVISIBLE
-                tv_stat4 = findViewById(R.id.tv_stat4)!!
+                tv_stat4 = findViewById(R.id.tv_stat3)!!
             }
         }
         front_card.bringToFront()

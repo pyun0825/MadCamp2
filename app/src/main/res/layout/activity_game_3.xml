@@ -15,21 +15,21 @@
         android:fontFamily="@font/lemon_milk"
         android:gravity="center_vertical"
         android:rotation="0"
-        android:text="ID : 1\nCards : 30"
+        android:text="ID : \nCards :"
         android:textFontWeight="1000"
         app:layout_constraintBottom_toTopOf="@+id/iv_Open2"
-        app:layout_constraintEnd_toStartOf="@+id/tv_stat4"
+        app:layout_constraintEnd_toStartOf="@+id/tv_stat3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_stat4"
+        android:id="@+id/tv_stat3"
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:fontFamily="@font/lemon_milk"
         android:gravity="center_vertical"
         android:rotation="0"
-        android:text="ID : 1\nCards : 30"
+        android:text="ID : \nCards :"
         android:textFontWeight="1000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_stat2"
@@ -43,7 +43,7 @@
         android:fontFamily="@font/lemon_milk"
         android:gravity="center_vertical"
         android:rotation="0"
-        android:text="ID : 1\nCards : 30"
+        android:text="ID :\nCards :"
         android:textFontWeight="1000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -133,7 +133,7 @@
         app:layout_constraintEnd_toStartOf="@+id/iv_Open3"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_stat4"
+        app:layout_constraintTop_toBottomOf="@+id/tv_stat3"
         app:srcCompat="@drawable/card_lemon_3" />
 
     <ImageView
