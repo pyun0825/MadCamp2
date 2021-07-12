@@ -92,7 +92,7 @@
         android:fontFamily="@font/lemon_milk"
         android:gravity="center_vertical"
         android:rotation="0"
-        android:text="ID : 1\nCards : 30"
+        android:text="ID : \nCards : "
         android:textFontWeight="1000"
 
         app:layout_constraintBottom_toTopOf="@+id/iv_Open2"
@@ -107,7 +107,7 @@
         android:fontFamily="@font/lemon_milk"
         android:gravity="center_vertical"
         android:rotation="0"
-        android:text="ID : 2\nCards : 20"
+        android:text="ID : \nCards :"
         android:textFontWeight="1000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

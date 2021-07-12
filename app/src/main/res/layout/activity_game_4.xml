@@ -8,80 +8,82 @@
     android:background="@color/white"
     tools:context=".GameActivity">
 
-    <TextView
-        android:id="@+id/tv_stat4"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="12dp"
-        android:background="#5C2222"
-        android:fontFamily="@font/lemon_milk"
-        android:gravity="center_vertical"
-        android:rotation="0"
-        android:text="ID : 1\nCards : 30"
-        android:textColor="#FFFFFF"
-        android:textFontWeight="1000"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_stat2"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_game_1"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toTopOf="@id/cl_game_2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tv_stat3" />
-
-    <TextView
-        android:id="@+id/tv_stat3"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="12dp"
-        android:background="#5C2222"
-        android:fontFamily="@font/lemon_milk"
-        android:gravity="center_vertical"
-        android:rotation="0"
-        android:text="ID : 1\nCards : 30"
-        android:textColor="#FFFFFF"
-        android:textFontWeight="1000"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_stat2"
-        app:layout_constraintEnd_toStartOf="@+id/tv_stat4"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tv_stat2" />
-
-    <TextView
-        android:id="@+id/tv_stat2"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="12dp"
-        android:background="#5C2222"
-        android:fontFamily="@font/lemon_milk"
-        android:gravity="center_vertical"
-        android:rotation="0"
-        android:text="ID : 1\nCards : 30"
-        android:textColor="#FFFFFF"
-        android:textFontWeight="1000"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/tv_stat3"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/tv_stat"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="12dp"
-        android:fontFamily="@font/lemon_milk"
-        android:gravity="center_vertical"
-        android:rotation="0"
-        android:text="ID : 1\nCards : 30"
-        android:textFontWeight="1000"
-        android:textSize="12sp"
+        <TextView
+            android:id="@+id/tv_stat4"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:fontFamily="@font/lemon_milk"
+            android:gravity="center_vertical"
+            android:rotation="0"
+            android:text="ID : 1\nCards : 30"
+            android:textFontWeight="1000"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_stat2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_stat3" />
+
+        <TextView
+            android:id="@+id/tv_stat3"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:fontFamily="@font/lemon_milk"
+            android:gravity="center_vertical"
+            android:rotation="0"
+            android:text="ID : 1\nCards : 30"
+            android:textFontWeight="1000"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_stat2"
+            app:layout_constraintEnd_toStartOf="@+id/tv_stat4"
+            app:layout_constraintStart_toEndOf="@+id/tv_stat2" />
+
+        <TextView
+            android:id="@+id/tv_stat2"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:fontFamily="@font/lemon_milk"
+            android:gravity="center_vertical"
+            android:rotation="0"
+            android:text="ID : 1\nCards : 30"
+            android:textFontWeight="1000"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_stat3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_game_2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_DeckView" />
+        app:layout_constraintTop_toBottomOf="@id/cl_game_1">
+
+        <TextView
+            android:id="@+id/tv_stat"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:fontFamily="@font/lemon_milk"
+            android:gravity="center_vertical"
+            android:text="ID : 1\nCards : 30"
+            android:textFontWeight="1000"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_DeckView" />
 
     <ImageView
         android:id="@+id/iv_drawCard4"
@@ -194,11 +196,10 @@
         android:layout_height="142dp"
         android:layout_marginTop="30dp"
         android:rotation="0"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/ib_bell"
         app:layout_constraintEnd_toStartOf="@id/iv_Open3"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_stat2"
         app:srcCompat="@drawable/card_lemon_3" />
 
     <ImageView
@@ -241,18 +242,18 @@
         app:layout_constraintStart_toStartOf="@id/iv_Open2"
         app:srcCompat="@drawable/card_empty" />
 
-    <ImageView
-        android:id="@+id/iv_DeckView"
-        android:layout_width="100dp"
-        android:layout_height="142dp"
-        android:rotation="0"
-        app:layout_constraintBottom_toTopOf="@id/tv_stat"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/iv_myOpen"
-        app:layout_constraintTop_toBottomOf="@id/ib_bell"
-        app:srcCompat="@drawable/card_empty" />
+        <ImageView
+            android:id="@+id/iv_DeckView"
+            android:layout_width="100dp"
+            android:layout_height="142dp"
+            android:rotation="0"
+            app:layout_constraintBottom_toTopOf="@id/tv_stat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_myOpen"
+            app:layout_constraintTop_toBottomOf="@id/ib_bell"
+            app:srcCompat="@drawable/card_empty" />
 
-    <ImageButton
+        <ImageButton
         android:id="@+id/ib_bell"
         android:layout_width="171dp"
         android:layout_height="123dp"
@@ -261,9 +262,10 @@
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@id/iv_DeckView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_Open2"
         app:srcCompat="@drawable/bell" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

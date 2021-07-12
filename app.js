@@ -9,8 +9,8 @@ const url = 'mongodb://localhost:27017';
 
 app.use(express.json());
 
-const server = app.listen(3000, () => {
-    console.log("Listening on port 3000....");
+const server = app.listen(443, () => {
+    console.log("Listening on port 443....");
 });
 
 const io = socket(server);
@@ -139,7 +139,12 @@ mongoClient.connect(url, (err, db) => {
                             [5,3,3,2,1],
                             [5,3,3,2,1]
                         ];
-                        io.to(roomName).emit('initial turn', player_list);
+                        var init_deck;
+                        collection3.findOne({name: roomName}, (err, result) => {
+                            init_deck = result.deck;
+                            console.log("deck: "+init_deck)
+                            io.to(roomName).emit('initial turn', player_list, JSON.stringify(init_deck));
+                        })
                         var opencards = [];
                         var turn = 0;
                         var test = 0;
@@ -180,18 +185,6 @@ mongoClient.connect(url, (err, db) => {
                                     }
                                     console.log("player "+fastest+" was the fastest")
                                     io.to(roomName).emit('turnend', fastest);
-                                    if(fastest != null){
-                                        var opencards = 0;
-                                        collection3.findOne({name: roomName}, (err, result)=>{
-                                            for(i in player_list){
-                                                console.log(player_list[i]);
-                                                opencards += result.deck[player_list[i]].Open;
-                                                collection3.updateOne({name: roomName}, {$set: {[`deck.${player_list[i]}.Open`]: 0}});
-                                            };
-                                            console.log(opencards);
-                                            collection3.updateOne({name: roomName}, {$inc: {[`deck.${fastest}.notOpen`]: opencards}});
-                                        });
-                                    };
                                 });
                             }
                             await timer(1000);

@@ -8,12 +8,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
 import androidx.core.graphics.drawable.toDrawable
 import io.socket.client.Socket
 import org.json.JSONArray
+import org.json.JSONObject
 import java.lang.System.currentTimeMillis
 
 class GameActivity : AppCompatActivity() {
@@ -28,7 +30,7 @@ class GameActivity : AppCompatActivity() {
     var banim4: AnimatorSet = AnimatorSet()
     var roomName = ""
     var my_game_id = ""
-    var started = 0
+    var turn_num = 0
     var fruitNum = 0
     var fruit = 0
     var turnPlayer = ""
@@ -38,6 +40,7 @@ class GameActivity : AppCompatActivity() {
     var dt: Long = 0
     var emitted: Int = 0
     var id_map = mutableMapOf<String, Int>()
+    var numcards = intArrayOf(0, 0, 0, 0)
     var card_list = intArrayOf(R.drawable.card_apple_1, R.drawable.card_apple_2, R.drawable.card_apple_3, R.drawable.card_apple_4, R.drawable.card_apple_5
         , R.drawable.card_avocado_1, R.drawable.card_avocado_2, R.drawable.card_avocado_3, R.drawable.card_avocado_4, R.drawable.card_avocado_5
         , R.drawable.card_grape_1, R.drawable.card_grape_2, R.drawable.card_grape_3, R.drawable.card_grape_4, R.drawable.card_grape_5
@@ -58,8 +61,13 @@ class GameActivity : AppCompatActivity() {
     lateinit var front_card4: ImageView
     lateinit var to_card4: ImageView
     lateinit var from_card4: ImageView
+    lateinit var tv_stat: TextView
+    lateinit var tv_stat2: TextView
+    lateinit var tv_stat3: TextView
+    lateinit var tv_stat4: TextView
     lateinit var BASE_URL: String
     lateinit var mSocket: Socket
+    lateinit var players: ArrayList<String>
     var drawid: Int = R.drawable.card_lemon_2
     var drawid2: Int = R.drawable.card_lemon_3
     var drawid3: Int = R.drawable.card_grape_5
@@ -80,11 +88,14 @@ class GameActivity : AppCompatActivity() {
         roomName = intent.getStringExtra("roomName") as String
         my_game_id = intent.getStringExtra("game_id") as String
         N = intent.getIntExtra("num_player", 0)
-        var players: ArrayList<String> = ArrayList<String>()
+        players = ArrayList<String>()
         mSocket.emit("ready", roomName, N)
 
         mSocket.on("initial turn"){ args->
             var jArray:JSONArray = args[0] as JSONArray
+            System.out.println(args[1])
+            var dArray:JSONObject = JSONObject(args[1] as String)
+            System.out.println(dArray)
             System.out.println(args)
             System.out.println(jArray)
             Log.i("initial turn : ", "done")
@@ -100,16 +111,26 @@ class GameActivity : AppCompatActivity() {
             }
             val j:Int = id_map[my_game_id]!!
             for (i in 0 until N) {
-                id_map[players[i]] = (i-j+N)%N
+                id_map[players[i]] = (i - j + N) % N
             }
-            for (i in 0 until N) {
-                id_map[players[i]] = (i-j+N)%N
-            }
+            initText(dArray)
 
             //ImageView에 플레이어 할당
             System.out.println("ImageView에 플레이어 할당")
             mSocket.on("turn"){ args->
-                if (started==0) {
+                if (turn_num==N) {
+                    runOnUiThread {
+                        to_card.visibility = View.VISIBLE
+                        to_card2.visibility = View.VISIBLE
+                        if (N > 2) {
+                            to_card3.visibility = View.VISIBLE
+                            if (N > 3) {
+                                to_card4.visibility = View.VISIBLE
+                            }
+                        }
+                    }
+                }
+                if (turn_num==0) {
                     setanim(fanim, banim, front_card, back_card, from_card, to_card, "Y")
                     if (N==4) {
                         setanim(fanim2, banim2, front_card2, back_card2, from_card2, to_card2, "X")
@@ -121,8 +142,8 @@ class GameActivity : AppCompatActivity() {
                             setanim(fanim3, banim3, front_card3, back_card3, from_card3, to_card3, "Y")
                         }
                     }
-                    started = 1
                 }
+                turn_num++
                 fruit = args[0] as Int
                 fruitNum = args[1] as Int
                 turnPlayer = args[2] as String
@@ -130,6 +151,8 @@ class GameActivity : AppCompatActivity() {
                 turn_i = id_map[turnPlayer] as Int
                 emitted = 0
                 System.out.println("Fruit: ${fruit} Num: ${fruitNum} Player: ${turnPlayer} Playid: ${turn_i}")
+                numcards[turn_i]--
+                updateText()
                 runOnUiThread {
                     if (turn_i == 0) {
                         to_card.setImageResource(drawid)
@@ -189,20 +212,28 @@ class GameActivity : AppCompatActivity() {
         front_card = findViewById(R.id.iv_myDeck)!!
         from_card = findViewById(R.id.iv_drawCard)!!
         to_card = findViewById(R.id.iv_myOpen)!!
+        to_card.visibility = View.INVISIBLE
+        tv_stat = findViewById(R.id.tv_stat)!!
         back_card2 = findViewById(R.id.iv_DeckView2)!!
         front_card2 = findViewById(R.id.iv_Deck2)!!
         from_card2 = findViewById(R.id.iv_drawCard2)!!
         to_card2 = findViewById(R.id.iv_Open2)!!
+        to_card2.visibility = View.INVISIBLE
+        tv_stat2 = findViewById(R.id.tv_stat2)!!
         if (N>2) {
             back_card3 = findViewById(R.id.iv_DeckView3)!!
             front_card3 = findViewById(R.id.iv_Deck3)!!
             from_card3 = findViewById(R.id.iv_drawCard3)!!
             to_card3 = findViewById(R.id.iv_Open3)!!
+            to_card3.visibility = View.INVISIBLE
+            tv_stat3 = findViewById(R.id.tv_stat3)!!
             if (N>3) {
                 back_card4 = findViewById(R.id.iv_DeckView4)!!
                 front_card4 = findViewById(R.id.iv_Deck4)!!
                 from_card4 = findViewById(R.id.iv_drawCard4)!!
                 to_card4 = findViewById(R.id.iv_Open4)!!
+                to_card4.visibility = View.INVISIBLE
+                tv_stat4 = findViewById(R.id.tv_stat4)!!
             }
         }
         front_card.bringToFront()
@@ -218,6 +249,7 @@ class GameActivity : AppCompatActivity() {
             }
         }
     }
+
 
     fun onRing(view: View) {
         if (is_five==1) {
@@ -243,25 +275,25 @@ class GameActivity : AppCompatActivity() {
     }
 
     fun onClickDraw(view: View) {
-        if (started==1) {Toast.makeText(this, "Player 1 Draw!", Toast.LENGTH_SHORT).show()}
+        if (turn_num==1) {Toast.makeText(this, "Player 1 Draw!", Toast.LENGTH_SHORT).show()}
         fanim.start()
         banim.start()
     }
 
     fun onClickDraw2(view: View) {
-        if (started==1) {Toast.makeText(this, "Player 2 Draw!", Toast.LENGTH_SHORT).show()}
+        if (turn_num==1) {Toast.makeText(this, "Player 2 Draw!", Toast.LENGTH_SHORT).show()}
         fanim2.start()
         banim2.start()
     }
 
     fun onClickDraw3(view: View) {
-        if (started==1) {Toast.makeText(this, "Player 3 Draw!", Toast.LENGTH_SHORT).show()}
+        if (turn_num==1) {Toast.makeText(this, "Player 3 Draw!", Toast.LENGTH_SHORT).show()}
         fanim3.start()
         banim3.start()
     }
 
     fun onClickDraw4(view: View) {
-        if (started==1) {Toast.makeText(this, "Player 4 Draw!", Toast.LENGTH_SHORT).show()}
+        if (turn_num==1) {Toast.makeText(this, "Player 4 Draw!", Toast.LENGTH_SHORT).show()}
         fanim4.start()
         banim4.start()
     }
@@ -321,5 +353,37 @@ class GameActivity : AppCompatActivity() {
         banim.play(banim3).with(banim2)
         banim.play(banim4).with(banim3)
         banim.play(banim5).with(banim4)
+    }
+
+    fun initText(dArray: JSONObject) {
+        for (i in players) {
+            var j:Int = id_map[i]!!
+            if (j==0) {
+                System.out.println(dArray)
+                numcards[0] = dArray.getJSONObject("1").getInt("notOpen")
+            } else if (j==1) {
+                numcards[1] = dArray.getJSONObject("2").getInt("notOpen")
+            } else if (j==2) {
+                numcards[2] = dArray.getJSONObject("3").getInt("notOpen")
+            } else if (j==3) {
+                numcards[3] = dArray.getJSONObject("4").getInt("notOpen")
+            }
+        }
+        updateText()
+    }
+
+    fun updateText() {
+        for (i in players) {
+            var j: Int = id_map[i]!!
+            if (j == 0) {
+                tv_stat.setText("ID: ${i}\nCARDS: ${numcards[0]}")
+            } else if (j == 1) {
+                tv_stat2.setText("ID: ${i}\nCARDS: ${numcards[1]}")
+            } else if (j == 2) {
+                tv_stat3.setText("ID: ${i}\nCARDS: ${numcards[2]}")
+            } else if (j == 3) {
+                tv_stat4.setText("ID: ${i}\nCARDS: ${numcards[3]}")
+            }
+        }
     }
 }
