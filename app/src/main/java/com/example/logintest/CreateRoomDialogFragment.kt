@@ -30,6 +30,7 @@ class CreateRoomDialogFragment(context: Context, var retrofitInterface: Retrofit
         val createBtn = RootView.findViewById<Button>(R.id.bt_room_submit)
         val roomName = RootView.findViewById<EditText>(R.id.et_room_name)
         val numPlayer = RootView.findViewById<EditText>(R.id.et_room_num)
+        val turnNum = RootView.findViewById<EditText>(R.id.et_turn)
 
         cancelBtn.setOnClickListener {
             dismiss()
@@ -39,6 +40,7 @@ class CreateRoomDialogFragment(context: Context, var retrofitInterface: Retrofit
             var map: HashMap<String, Any> = HashMap()
             map.put("name", roomName.text.toString())
             map.put("num_player", numPlayer.text.toString().toInt())
+            map.put("turn", turnNum.text.toString().toInt())
             val call: Call<Void> = retrofitInterface.makeRoom(map)
             call.enqueue(object: Callback<Void>{
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {

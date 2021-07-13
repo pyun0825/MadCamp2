@@ -113,16 +113,17 @@ mongoClient.connect(url, (err, db) => {
             socket.once('ready', (arg1,arg2)=>{
                 const roomName = arg1;
                 const num_player = arg2;
+                var turnNum = 56;
                 console.log(arg2);
                 count++;
                 console.log("Socket: "+socket.nickname+" Count: ",count);
                 if(count == num_player){
                     var player_list;
                     collection2.findOne({name: roomName}, (err, result)=>{
+                        turnNum = result.turn;
                         player_list = result.player_list;
                         for(i in player_list){
                             var player = player_list[i];
-                            var newDeck;
                             const update = {
                                 $set: {[`deck.${player}.notOpen`]: 56/num_player, [`deck.${player}.Open`]: 0}
                             };
@@ -143,7 +144,7 @@ mongoClient.connect(url, (err, db) => {
                         collection3.findOne({name: roomName}, (err, result) => {
                             init_deck = result.deck;
                             console.log("deck: "+init_deck)
-                            io.to(roomName).emit('initial turn', player_list, JSON.stringify(init_deck));
+                            io.to(roomName).emit('initial turn', player_list, JSON.stringify(init_deck), turnNum);
                         })
                         setTimeout(async function(){
                             var opencards = [];
@@ -151,7 +152,7 @@ mongoClient.connect(url, (err, db) => {
                             var loser = null;
                             var lowest = null;
                             var test = 0;
-                            while(test< 56 && loser === null){
+                            while(test< turnNum && loser === null){
                                 var flipCard = randCard(cards);
                                 addToOpen(opencards, num_player, flipCard);
                                 collection3.updateOne({name: roomName}, { $inc: { [`deck.${player_list[turn]}.notOpen`]: -1, [`deck.${player_list[turn]}.Open`]: 1} })
@@ -353,6 +354,7 @@ mongoClient.connect(url, (err, db) => {
                         name: req.body.name,
                         num_player: req.body.num_player,
                         cur_player: 0,
+                        turn: req.body.turn,
                         player_list: [],
                         time_gap: {}
                     };
