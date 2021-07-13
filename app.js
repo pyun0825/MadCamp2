@@ -114,7 +114,6 @@ mongoClient.connect(url, (err, db) => {
                 const roomName = arg1;
                 const num_player = arg2;
                 var turnNum = 56;
-                console.log(arg2);
                 count++;
                 console.log("Socket: "+socket.nickname+" Count: ",count);
                 if(count == num_player){
@@ -130,7 +129,6 @@ mongoClient.connect(url, (err, db) => {
                             collection3.updateOne({name: roomName}, update);
                         };
                     });
-                    console.log("emitting test");
                     count = 0;
                     setTimeout(function(){
                         console.log(player_list);
@@ -143,7 +141,6 @@ mongoClient.connect(url, (err, db) => {
                         var init_deck;
                         collection3.findOne({name: roomName}, (err, result) => {
                             init_deck = result.deck;
-                            console.log("deck: "+init_deck)
                             io.to(roomName).emit('initial turn', player_list, JSON.stringify(init_deck), turnNum);
                         })
                         setTimeout(async function(){
@@ -221,7 +218,6 @@ mongoClient.connect(url, (err, db) => {
                                         };
                                     };
                                 });
-                                console.log(loser);
                                 await timer(1000);
                             };
                             if(loser != null){
@@ -231,7 +227,6 @@ mongoClient.connect(url, (err, db) => {
                                             $inc: {score: -10}
                                         });
                                     } else {
-                                        console.log(player_list[i])
                                         collection.updateOne({game_id: player_list[i]}, {
                                             $inc: {score: 10}
                                         });
@@ -245,7 +240,6 @@ mongoClient.connect(url, (err, db) => {
                                             $inc: {score: -10}
                                         });
                                     } else {
-                                        console.log(player_list[i])
                                         collection.updateOne({game_id: player_list[i]}, {
                                             $inc: {score: 10}
                                         });
