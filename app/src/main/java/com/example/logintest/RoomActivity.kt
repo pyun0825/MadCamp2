@@ -59,6 +59,25 @@ class RoomActivity : AppCompatActivity() {
             }
         })
 
+        var scoreBtn = findViewById<Button>(R.id.bt_score)
+        scoreBtn.setOnClickListener {
+            var map:HashMap<String,String> = HashMap()
+            map.put("game_id", game_id)
+            var call = retrofitInterface.myScore(map)
+            call.enqueue((object: Callback<ScoreResult>{
+                override fun onResponse(call: Call<ScoreResult>, response: Response<ScoreResult>) {
+                    var userName: String? = response.body()?.name
+                    var score:Int? = response.body()?.score
+                    val dialog = ScoreFragment(userName, score)
+                    dialog.show(supportFragmentManager, "scoreDialog")
+                }
+
+                override fun onFailure(call: Call<ScoreResult>, t: Throwable) {
+                    //
+                }
+            }))
+        }
+
         var logOutBtn = findViewById<Button>(R.id.bt_log_out)
         logOutBtn.setOnClickListener {
             var map:HashMap<String,String> = HashMap()

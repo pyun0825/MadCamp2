@@ -9,12 +9,8 @@ const url = 'mongodb://localhost:27017';
 
 app.use(express.json());
 
-//const server = app.listen(3000, () => {
-//    console.log("Listening on port 3000....");
-//});
-
-const server = app.listen(443, () => {
-    console.log("Listening on port 443....");
+const server = app.listen(3000, () => {
+    console.log("Listening on port 3000....");
 });
 
 const io = socket(server);
@@ -135,7 +131,7 @@ mongoClient.connect(url, (err, db) => {
                     });
                     console.log("emitting test");
                     count = 0;
-                    setTimeout(async function(){
+                    setTimeout(function(){
                         console.log(player_list);
                         var cards = [
                             [5,3,3,2,1],
@@ -149,62 +145,87 @@ mongoClient.connect(url, (err, db) => {
                             console.log("deck: "+init_deck)
                             io.to(roomName).emit('initial turn', player_list, JSON.stringify(init_deck));
                         })
-                        var opencards = [];
-                        var turn = 0;
-                        var test = 0;
-                        while(test < 56){
-                            var flipCard = randCard(cards);
-                            addToOpen(opencards, num_player, flipCard);
-                            collection3.updateOne({name: roomName}, { $inc: { [`deck.${player_list[turn]}.notOpen`]: -1, [`deck.${player_list[turn]}.Open`]: 1} })
-                            console.log("Player: "+player_list[turn]);
-                            console.log(opencards);
-                            if(isFive(opencards)){
-                                io.to(roomName).emit('turn', flipCard.fruit, flipCard.num, player_list[turn], 1);
-                                const query = {name: roomName};
-                                collection2.findOne(query, (err, result)=>{
-                                    const newValue = {
-                                        $set: {time_gap : {}}//
-                                    };
-                                    collection2.updateOne(query, newValue);
-                                });
-                                console.log("Waiting for bell");
-                            } else{
-                                io.to(roomName).emit('turn', flipCard.fruit, flipCard.num, player_list[turn], 0);
-                            };
-                            turn = (turn+1)%num_player;
-                            test++;//
-                            await timer(2000);
-                            const query = {name: roomName};
-                            if(isFive(opencards)){
-                                collection2.findOne(query, (err, result)=>{
-                                    time_gap_map = result.time_gap
-                                    let fastest = null
-                                    for (var player in time_gap_map) {
-                                        if (fastest == null) {
-                                            fastest = player
+                        setTimeout(async function(){
+                            var opencards = [];
+                            var turn = 0;
+                            var loser = null;
+                            var test = 0;
+                            while(test< 56 && loser === null){
+                                var flipCard = randCard(cards);
+                                addToOpen(opencards, num_player, flipCard);
+                                collection3.updateOne({name: roomName}, { $inc: { [`deck.${player_list[turn]}.notOpen`]: -1, [`deck.${player_list[turn]}.Open`]: 1} })
+                                console.log("Player: "+player_list[turn]);
+                                console.log(opencards);
+                                if(isFive(opencards)){
+                                    io.to(roomName).emit('turn', flipCard.fruit, flipCard.num, player_list[turn], 1);
+                                    const query = {name: roomName};
+                                    collection2.findOne(query, (err, result)=>{
+                                        const newValue = {
+                                            $set: {time_gap : {}}//
+                                        };
+                                        collection2.updateOne(query, newValue);
+                                    });
+                                    console.log("Waiting for bell");
+                                } else{
+                                    io.to(roomName).emit('turn', flipCard.fruit, flipCard.num, player_list[turn], 0);
+                                };
+                                turn = (turn+1)%num_player;
+                                test++;
+                                await timer(2000);
+                                if(isFive(opencards)){
+                                    const query = {name: roomName};
+                                    collection2.findOne(query, (err, result)=>{
+                                        time_gap_map = result.time_gap
+                                        let fastest = null
+                                        for (var player in time_gap_map) {
+                                            if (fastest == null) {
+                                                fastest = player
+                                            }
+                                            else if (time_gap_map[player] < time_gap_map[fastest]) {
+                                                fastest = player
+                                            }
                                         }
-                                        else if (time_gap_map[player] < time_gap_map[fastest]) {
-                                            fastest = player
-                                        }
+                                        if(fastest != null){
+                                            var opencardnum = 0;
+                                            collection3.findOne({name: roomName}, (err, result)=>{
+                                                for(i in player_list){
+                                                    opencardnum += result.deck[player_list[i]].Open;
+                                                    collection3.updateOne({name: roomName}, {$set: {[`deck.${player_list[i]}.Open`]: 0}});
+                                                };
+                                                collection3.updateOne({name: roomName}, {$inc: {[`deck.${fastest}.notOpen`]: opencardnum}});
+                                            });
+                                        };
+                                        console.log("player "+fastest+" was the fastest")
+                                        io.to(roomName).emit('turnend', fastest);
+                                    });
+                                };
+                                collection3.findOne({name: roomName},(err, result)=>{
+                                    for(i in player_list){
+                                        if(result.deck[player_list[i]].notOpen === 0){
+                                            loser = player_list[i];
+                                        };
                                     }
-                                    console.log("player "+fastest+" was the fastest")
-                                    io.to(roomName).emit('turnend', fastest);
-                                    if(fastest != null){
-                                        var opencards = 0;
-                                        collection3.findOne({name: roomName}, (err, result)=>{
-                                            for(i in player_list){
-                                                console.log(player_list[i]);
-                                                opencards += result.deck[player_list[i]].Open;
-                                                collection3.updateOne({name: roomName}, {$set: {[`deck.${player_list[i]}.Open`]: 0}});
-                                            };
-                                            console.log(opencards);
-                                            collection3.updateOne({name: roomName}, {$inc: {[`deck.${fastest}.notOpen`]: opencards}});
+                                });
+                                console.log(loser);
+                                await timer(1000);
+                            };
+                            if(loser != null){
+                                for (i in player_list){
+                                    if(player_list[i] === loser){
+                                        collection.updateOne({game_id: player_list[i]}, {
+                                            $inc: {score: -10}
+                                        });
+                                    } else {
+                                        console.log(player_list[i])
+                                        collection.updateOne({game_id: player_list[i]}, {
+                                            $inc: {score: 10}
                                         });
                                     };
-                                });
-                            }
-                            await timer(1000);
-                        };
+                                };
+                            } else{
+                                console.log("Draw");
+                            };
+                        },500);
                     }, 3000);
                 };
             });
@@ -234,7 +255,8 @@ mongoClient.connect(url, (err, db) => {
                 name: req.body.name,
                 game_id: req.body.game_id,
                 password: req.body.password,
-                logged_in: 0
+                logged_in: 0,
+                score: 0
             };
 
             const query = {game_id: newUser.game_id};
@@ -328,7 +350,7 @@ mongoClient.connect(url, (err, db) => {
                     res.status(400).send();
                 };
             });
-            
+
         });
 
         app.post('/enter', (req, res)=>{
@@ -375,7 +397,17 @@ mongoClient.connect(url, (err, db) => {
                     curPlayer: result.cur_player
                 };
                 res.send(JSON.stringify(objToSend));
-            })
-        })
+            });
+        });
+
+        app.post('/score', (req, res)=>{
+            collection.findOne({game_id: req.body.game_id}, (err, result)=>{
+                const objToSend = {
+                    name: result.name,
+                    score: result.score
+                };
+                res.send(JSON.stringify(objToSend));
+            });
+        });
     };
 });
