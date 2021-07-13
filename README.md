@@ -37,7 +37,8 @@ Holly Molly의 트레이드마크인 아보카도를 로고에 사용하였다.
 
 
 ## Game
-<img src="https://user-images.githubusercontent.com/79245586/125462908-a776d09d-e592-49cc-a1a6-68d21c7a46ae.gif" width="20%"> <img src="https://user-images.githubusercontent.com/79245586/125462917-859739b6-d4e2-4f60-933b-4b8079f98903.gif" width="20%">
+<img src="https://user-images.githubusercontent.com/79245586/125462908-a776d09d-e592-49cc-a1a6-68d21c7a46ae.gif" width="20%"> <img src="https://user-images.githubusercontent.com/79245586/125464192-502b7550-14bb-461c-abe2-5a22975b835f.gif" width="20%">
+
 
 > 덱(deck)의 수가 0이 되는 참가자, 혹은 정해둔 턴이 모두 지났을 때 남은 덱의 수가 가장 작은 참가자가 패배하며 패배한 사람은 누적점수 -10, 나머지는 +10점이 된다.
 >
