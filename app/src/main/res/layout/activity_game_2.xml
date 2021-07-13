@@ -152,7 +152,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:fontFamily="@font/lemon_milk"
-            android:text="56"
+            android:text=""
             android:textFontWeight="1000"
             android:textSize="50sp"
             app:layout_constraintEnd_toEndOf="parent"
