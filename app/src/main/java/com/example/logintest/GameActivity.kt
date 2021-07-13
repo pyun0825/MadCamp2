@@ -17,6 +17,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.System.currentTimeMillis
+import java.lang.Thread.sleep
 
 class GameActivity : AppCompatActivity() {
     var roomName = ""
@@ -32,10 +33,12 @@ class GameActivity : AppCompatActivity() {
     var dt: Long = 0
     var emitted: Int = 0
     var basetime: Long = 300
-    var id_map = mutableMapOf<String, Int>()
+    var id2name = mutableMapOf<String, String>()
+    var id2order = mutableMapOf<String, Int>()
     var num_open_cards = intArrayOf(0, 0, 0, 0)
     var num_close_cards = intArrayOf(0, 0, 0, 0)
     var total_turn_num: Int = 0
+    var can_ring: Int = 1
     var drawid = intArrayOf(R.drawable.card_empty, R.drawable.card_empty, R.drawable.card_empty, R.drawable.card_empty)
     var card_list = intArrayOf(R.drawable.card_apple_1, R.drawable.card_apple_2, R.drawable.card_apple_3, R.drawable.card_apple_4, R.drawable.card_apple_5
         , R.drawable.card_avocado_1, R.drawable.card_avocado_2, R.drawable.card_avocado_3, R.drawable.card_avocado_4, R.drawable.card_avocado_5
@@ -46,6 +49,7 @@ class GameActivity : AppCompatActivity() {
     var fanim: MutableList<AnimatorSet> = mutableListOf()
     var banim: MutableList<AnimatorSet> = mutableListOf()
     lateinit var tv_leftturn: TextView
+    lateinit var ib_bell: ImageButton
     lateinit var back_card: MutableList<ImageView>
     lateinit var front_card: MutableList<ImageView>
     lateinit var to_card: MutableList<ImageView>
@@ -62,8 +66,8 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mediaPlayer1 = MediaPlayer.create(this, R.raw.yes_five)
-        mediaPlayer2 = MediaPlayer.create(this, R.raw.not_five)
+        mediaPlayer1 = MediaPlayer.create(this, R.raw.yes_five_2)
+        mediaPlayer2 = MediaPlayer.create(this, R.raw.not_five_2)
 
         mSocket = SocketHandler.getSocket()
 
@@ -75,26 +79,27 @@ class GameActivity : AppCompatActivity() {
 
         mSocket.on("initial turn"){ args->
             var jArray:JSONArray = args[0] as JSONArray
-            System.out.println(args[1])
-            var dArray:JSONObject = JSONObject(args[1] as String)
-            total_turn_num = args[2] as Int
+            var nameArray:JSONArray = args[1] as JSONArray
+            var dArray:JSONObject = JSONObject(args[2] as String)
+            total_turn_num = args[3] as Int
             System.out.println(dArray)
             System.out.println(args)
             System.out.println(jArray)
             Log.i("initial turn : ", "done")
             if(jArray != null){
                 for(i in 0 until jArray.length()){
+                    id2name[jArray.getString(i)] = nameArray.getString(i)
                     players.add(jArray.getString(i))
                 }
             }
             System.out.println(players)
 
             for (i in 0 until N) {
-                id_map[players[i]] = i
+                id2order[players[i]] = i
             }
-            val j:Int = id_map[my_game_id]!!
+            val j:Int = id2order[my_game_id]!!
             for (i in 0 until N) {
-                id_map[players[i]] = (i - j + N) % N
+                id2order[players[i]] = (i - j + N) % N
             }
             initText(dArray)
             for (i in 0 until N) {
@@ -126,6 +131,9 @@ class GameActivity : AppCompatActivity() {
                 }
                 for (i in front_card) {i.bringToFront()}
                 for (i in back_card) {i.bringToFront()}
+                if (can_ring == 1) {
+                    ib_bell.setImageResource(R.drawable.bell_1)
+                }
             }
             recent_turn_num++
             turn_num++
@@ -133,7 +141,7 @@ class GameActivity : AppCompatActivity() {
             fruitNum = args[1] as Int
             turnPlayer = args[2] as String
             is_five = args[3] as Int
-            turn_i = id_map[turnPlayer] as Int
+            turn_i = id2order[turnPlayer] as Int
             emitted = 0
             System.out.println("Fruit: ${fruit} Num: ${fruitNum} Player: ${turnPlayer} Playid: ${turn_i}")
             num_close_cards[turn_i]--
@@ -143,6 +151,9 @@ class GameActivity : AppCompatActivity() {
                 to_card[turn_i].setImageResource(drawid[turn_i])
                 drawid[turn_i] = card_list[fruit * 5 + fruitNum]
                 front_card[turn_i].setImageResource(drawid[turn_i])
+                if (num_close_cards[turn_i] == 0) {
+                    from_card[turn_i].visibility = View.INVISIBLE
+                }
                 fanim[turn_i].start()
                 banim[turn_i].start()
             }
@@ -161,8 +172,17 @@ class GameActivity : AppCompatActivity() {
 //                        Toast.makeText(this, "Nobody rang the bell.", Toast.LENGTH_SHORT).show()
                 } else {
                     fastest = args[0] as String
-                    Toast.makeText(this, "Player ${fastest} was the fastest!", Toast.LENGTH_SHORT).show()
-                    var j:Int = id_map[fastest]!!
+                    runOnUiThread {
+                        if (can_ring == 1) {
+                            if (fastest == my_game_id) {
+                                ib_bell.setImageResource(R.drawable.bell_2)
+                            } else {
+                                ib_bell.setImageResource(R.drawable.bell_5)
+                            }
+                        }
+                    }
+//                    Toast.makeText(this, "Player ${fastest} was the fastest!", Toast.LENGTH_SHORT).show()
+                    var j:Int = id2order[fastest]!!
                     var flipfanim: AnimatorSet = AnimatorSet()
                     var flipbanim: AnimatorSet = AnimatorSet()
                     var movefanim: AnimatorSet = AnimatorSet()
@@ -194,22 +214,32 @@ class GameActivity : AppCompatActivity() {
 
         mSocket.on("game over") { args ->
             var loser = args[0] as String
-            var my_cards = num_close_cards[id_map[my_game_id]!!]
-            var resultstr = ""
+            var my_cards = num_close_cards[id2order[my_game_id]!!]
+            var result_id = ""
+            var result_cardnum = ""
+            var result_point = ""
             var place = 1
             for (i in players) {
-                if (num_close_cards[id_map[i]!!] > my_cards) {
+                if (num_close_cards[id2order[i]!!] > my_cards) {
                     place++
                 }
-                resultstr += "${i} : ${num_close_cards[id_map[i]!!]}\n"
+                result_id += "${id2name[i]}\n"
+                result_cardnum += "${num_close_cards[id2order[i]!!]}\n"
             }
             if (my_game_id == loser) {
-                resultstr += "Lost 10 points..."
+                result_point += "Lost 10 points..."
             } else {
-                resultstr += "Gained 10 points!"
+                result_point += "Gained 10 points!"
             }
-            val dialog = GameoverFragment(place, resultstr)
+            val dialog = GameoverFragment(place, result_id, result_cardnum, result_point)
             dialog.show(supportFragmentManager, "GameOverDialog")
+        }
+
+        mSocket.on("wrongring done") { args ->
+            runOnUiThread {
+                ib_bell.setImageResource(R.drawable.bell_1)
+                can_ring = 1
+            }
         }
 
         if (N==2) {
@@ -221,6 +251,7 @@ class GameActivity : AppCompatActivity() {
         }
 
         tv_leftturn = findViewById(R.id.tv_leftturn)
+        ib_bell = findViewById(R.id.ib_bell)
         back_card = mutableListOf(findViewById(R.id.iv_DeckView)!!, findViewById(R.id.iv_DeckView2)!!)
         front_card = mutableListOf(findViewById(R.id.iv_myDeck)!!, findViewById(R.id.iv_Deck2)!!)
         from_card = mutableListOf(findViewById(R.id.iv_drawCard)!!, findViewById(R.id.iv_drawCard2)!!)
@@ -247,26 +278,34 @@ class GameActivity : AppCompatActivity() {
 
 
     fun onRing(view: View) {
+        if (can_ring == 0) {
+            return
+        }
         if (is_five==1) {
             dt = currentTimeMillis() - start_time
-            if (dt<basetime) {
-                wrongRing()
-            }
+//            if (dt<basetime) {
+//                wrongRing()
+//            }
             if (emitted == 0) {
-                Toast.makeText(this, "Player ${my_game_id} rang the bell!", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "Player ${my_game_id} rang the bell!", Toast.LENGTH_SHORT).show()
+                ib_bell.setImageResource(R.drawable.bell_3)
             }
             emitted = 1
             mSocket.emit("ringbell", roomName, my_game_id, currentTimeMillis() - start_time)
             is_five = 0
             mediaPlayer1.start()
         } else {
-            wrongRing()
             mediaPlayer2.start()
+            wrongRing()
         }
     }
 
     fun wrongRing() {
-
+        runOnUiThread {
+            ib_bell.setImageResource(R.drawable.bell_4)
+            can_ring = 0
+            mSocket.emit("wrongring")
+        }
     }
 
     fun onClickDraw(view: View) {
@@ -354,7 +393,7 @@ class GameActivity : AppCompatActivity() {
 
     fun initText(dArray: JSONObject) {
         for (i in players) {
-            var j:Int = id_map[i]!!
+            var j:Int = id2order[i]!!
             if (j==0) {
                 System.out.println(dArray)
                 num_close_cards[0] = dArray.getJSONObject(i).getInt("notOpen")
@@ -372,8 +411,8 @@ class GameActivity : AppCompatActivity() {
     fun updateText() {
         runOnUiThread {
             for (i in players) {
-                var j: Int = id_map[i]!!
-                tv_stat[j].setText("ID: ${i}\nCARDS: ${num_close_cards[j]}")
+                var j: Int = id2order[i]!!
+                tv_stat[j].setText("NAME: ${id2name[i]}\nCARDS: ${num_close_cards[j]}")
             }
             tv_leftturn.setText((total_turn_num - turn_num).toString())
         }

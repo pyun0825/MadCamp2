@@ -87,13 +87,14 @@
 
     <TextView
         android:id="@+id/tv_stat2"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/lemon_milk"
         android:gravity="center_vertical"
         android:rotation="0"
-        android:text="ID : \nCards : "
-        android:textFontWeight="1000"
+        android:text="name : \nCards : "
+        android:textFontWeight="700"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/iv_Open2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -101,13 +102,14 @@
 
     <TextView
         android:id="@+id/tv_stat"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/lemon_milk"
         android:gravity="center_vertical"
         android:rotation="0"
-        android:text="ID : \nCards :"
-        android:textFontWeight="1000"
+        android:text="name : \nCards :"
+        android:textFontWeight="700"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -136,7 +138,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_Open2"
-        app:srcCompat="@drawable/bell" />
+        app:srcCompat="@drawable/bell_1" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"

@@ -4,18 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
+    android:padding="40dp"
     tools:context=".CreateRoomDialogFragment">
 
     <TextView
         android:id="@+id/tv_create_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:fontFamily="@font/lemon_milk"
         android:text="Create Room"
         android:textColor="#000000"
-        android:textSize="34sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,10 +22,8 @@
 
     <EditText
         android:id="@+id/et_room_name"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
         android:ems="10"
         android:fontFamily="@font/lemon_milk"
         android:inputType="textPersonName"
@@ -37,58 +34,50 @@
 
     <TextView
         android:id="@+id/et_room_name2"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
         android:ems="10"
         android:fontFamily="@font/lemon_milk"
         android:inputType="textPersonName"
         android:text="Number of players"
-        android:textSize="18sp"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_room_name" />
 
     <TextView
         android:id="@+id/et_room_name3"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
         android:ems="10"
         android:fontFamily="@font/lemon_milk"
         android:inputType="textPersonName"
         android:text="room name"
-        android:textSize="18sp"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_create_title" />
 
     <TextView
         android:id="@+id/et_room_name4"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
         android:ems="10"
         android:fontFamily="@font/lemon_milk"
         android:inputType="textPersonName"
         android:text="Number of turns"
-        android:textSize="18sp"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_room_num" />
 
     <RadioGroup
         android:id="@+id/et_room_num"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
         android:orientation="horizontal"
         android:weightSum="3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -124,10 +113,8 @@
 
     <EditText
         android:id="@+id/et_turn"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
         android:ems="10"
         android:fontFamily="@font/lemon_milk"
         android:inputType="numberDecimal"
@@ -144,8 +131,9 @@
         android:fontFamily="@font/lemonmilk_bold"
         android:text="submit"
         app:backgroundTint="#4CAF50"
-        app:layout_constraintEnd_toEndOf="@+id/et_turn"
-        app:layout_constraintTop_toBottomOf="@+id/et_turn" />
+        app:layout_constraintEnd_toEndOf="@id/et_turn"
+        app:layout_constraintStart_toEndOf="@id/bt_room_cancel"
+        app:layout_constraintTop_toBottomOf="@id/et_turn" />
 
     <Button
         android:id="@+id/bt_room_cancel"
@@ -155,6 +143,7 @@
         android:fontFamily="@font/lemonmilk_bold"
         android:text="cancel"
         app:backgroundTint="#F44336"
+        app:layout_constraintEnd_toStartOf="@+id/bt_room_submit"
         app:layout_constraintStart_toStartOf="@+id/et_turn"
         app:layout_constraintTop_toBottomOf="@+id/et_turn" />
 

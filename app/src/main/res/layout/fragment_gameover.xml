@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -15,25 +16,74 @@
         android:gravity="center"
         android:text="1st place"
         android:textFontWeight="700"
-        android:textSize="40sp" />
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_result"
-        android:layout_width="match_parent"
+        android:id="@+id/tv_result_cardnum"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
         android:fontFamily="@font/lemon_milk"
         android:gravity="center"
-        android:text="1 : 12\n2 : 7\n3 : 8\n4 : 20\ngained 10 points!"
+        android:text="12\n7\n8\n20\n"
         android:textFontWeight="700"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/bar"
+        app:layout_constraintTop_toTopOf="@+id/tv_result_id" />
+
+    <TextView
+        android:id="@+id/tv_result_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/lemon_milk"
+        android:gravity="center"
+        android:text="1\n2\n3\n4\n"
+        android:textFontWeight="700"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@id/bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_place" />
+
+    <TextView
+        android:id="@+id/tv_result_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/lemon_milk"
+        android:gravity="center"
+        android:text="Gained 10 points!"
+        android:textFontWeight="700"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bar" />
 
     <Button
         android:id="@+id/goto_wr"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/lemonmilk_bold"
         android:text="go to waiting room"
-        app:backgroundTint="#70AD47" />
-</LinearLayout>
+        app:backgroundTint="#70AD47"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_result_point" />
+
+    <ImageView
+        android:id="@+id/bar"
+        android:layout_width="2dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="30dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_result_id"
+        app:layout_constraintEnd_toStartOf="@+id/tv_result_cardnum"
+        app:layout_constraintStart_toEndOf="@+id/tv_result_id"
+        app:layout_constraintTop_toTopOf="@+id/tv_result_id"
+        app:srcCompat="@drawable/colorimage" />
+</androidx.constraintlayout.widget.ConstraintLayout>

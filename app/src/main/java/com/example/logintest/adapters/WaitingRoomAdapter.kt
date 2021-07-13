@@ -30,7 +30,11 @@ class  WaitingRoomAdapter(var context: Context, rooms: List<RoomResult>, var gam
         val layoutInflater = LayoutInflater.from(context)
         val roomRow = layoutInflater.inflate(R.layout.waiting_room_item, parent, false)
         val roomTitle = roomRow.findViewById<TextView>(R.id.tv_room)
-        roomTitle.text = "No.${position+1}: "+rooms[position].name
+        val roomTurns = roomRow.findViewById<TextView>(R.id.tv_room_turns)
+        val roomPlayers = roomRow.findViewById<TextView>(R.id.tv_room_players)
+        roomTitle.text = rooms[position].name
+        roomTurns.text = "${rooms[position].turn.toString()} turns"
+        roomPlayers.text = "${rooms[position].cur_player.toString()}/${rooms[position].num_player.toString()}"
 
         roomRow.setOnClickListener {
             val intent = Intent(context, InnerRoomActivity::class.java).apply{
