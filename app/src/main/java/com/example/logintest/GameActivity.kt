@@ -286,9 +286,9 @@ class GameActivity : AppCompatActivity() {
     }
 
     fun onClickDrawAll(i: Int) {
-        if (recent_turn_num==1) {Toast.makeText(this, "Player ${i+1} Draw!", Toast.LENGTH_SHORT).show()}
-        fanim[i].start()
-        banim[i].start()
+//        if (recent_turn_num==1) {Toast.makeText(this, "Player ${i+1} Draw!", Toast.LENGTH_SHORT).show()}
+//        fanim[i].start()
+//        banim[i].start()
     }
 
     fun setanim(fanim: AnimatorSet, banim: AnimatorSet, front: View, back: View, ori: Pair<Float, Float>, from: Pair<Float, Float>, to: Pair<Float, Float>, rot: String, dir: Int = 1, dur : Long = basetime, del: Long = 0) {
