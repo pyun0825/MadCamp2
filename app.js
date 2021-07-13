@@ -188,6 +188,12 @@ mongoClient.connect(url, (err, db) => {
                                             }
                                         }
                                         if(fastest != null){
+                                            cards = [
+                                                [5,3,3,2,1],
+                                                [5,3,3,2,1],
+                                                [5,3,3,2,1],
+                                                [5,3,3,2,1]
+                                            ];
                                             opencards = [];
                                             var opencardnum = 0;
                                             collection3.findOne({name: roomName}, (err, result)=>{
