@@ -230,6 +230,7 @@ mongoClient.connect(url, (err, db) => {
                                         });
                                     };
                                 };
+                                io.to(roomName).emit('game over', loser);
                             } else{
                                 for(i in player_list){
                                     if(player_list[i] === lowest){
@@ -243,6 +244,7 @@ mongoClient.connect(url, (err, db) => {
                                         });
                                     };
                                 }
+                                io.to(roomName).emit('game over', lowest);
                             };
                         },500);
                     }, 3000);
