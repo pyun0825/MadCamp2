@@ -100,7 +100,7 @@ class GameActivity : AppCompatActivity() {
             mSocket.on("turn"){ args->
                 runOnUiThread {
                     System.out.println("turn_num, N : "+turn_num+N)
-                    if (turn_num==N+1) {
+                    if (turn_num>N) {
                         for (i in to_card) {i.visibility = View.VISIBLE}
                     }
                     for (i in front_card) {i.bringToFront()}

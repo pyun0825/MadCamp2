@@ -149,6 +149,7 @@ mongoClient.connect(url, (err, db) => {
                             var opencards = [];
                             var turn = 0;
                             var loser = null;
+                            var lowest = null;
                             var test = 0;
                             while(test< 56 && loser === null){
                                 var flipCard = randCard(cards);
@@ -186,6 +187,7 @@ mongoClient.connect(url, (err, db) => {
                                             }
                                         }
                                         if(fastest != null){
+                                            opencards = [];
                                             var opencardnum = 0;
                                             collection3.findOne({name: roomName}, (err, result)=>{
                                                 for(i in player_list){
@@ -205,6 +207,12 @@ mongoClient.connect(url, (err, db) => {
                                             loser = player_list[i];
                                         };
                                     }
+                                    lowest = player_list[0];
+                                    for(j in player_list){
+                                        if(result.deck[lowest].notOpen > result.deck[player_list[j]].notOpen){
+                                            lowest = player_list[j];
+                                        };
+                                    };
                                 });
                                 console.log(loser);
                                 await timer(1000);
@@ -223,7 +231,18 @@ mongoClient.connect(url, (err, db) => {
                                     };
                                 };
                             } else{
-                                console.log("Draw");
+                                for(i in player_list){
+                                    if(player_list[i] === lowest){
+                                        collection.updateOne({game_id: player_list[i]}, {
+                                            $inc: {score: -10}
+                                        });
+                                    } else {
+                                        console.log(player_list[i])
+                                        collection.updateOne({game_id: player_list[i]}, {
+                                            $inc: {score: 10}
+                                        });
+                                    };
+                                }
                             };
                         },500);
                     }, 3000);
