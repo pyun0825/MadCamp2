@@ -141,6 +141,7 @@ class InnerRoomActivity : AppCompatActivity() {
                         putExtra("num_player", num_player)
                     }
                     startActivity(intent)
+                    finish()
                 }
                 findViewById<TextView>(R.id.tv_numPlayer).text = "Players needed: "+result?.numPlayer.toString()
                 findViewById<TextView>(R.id.tv_curPlayer).text = "Current players: "+result?.curPlayer.toString()

@@ -49,6 +49,7 @@ class CreateRoomDialogFragment(context: Context, var retrofitInterface: Retrofit
                             putExtra("game_id", game_id)
                         }
                         startActivity(intent)
+                        dismiss()
                     } else if(response.code() == 400){
                         Toast.makeText(context, "Room with equivalent name already exists!", Toast.LENGTH_LONG).show()
                         dismiss()
