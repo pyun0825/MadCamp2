@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
+import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.model.User
 import retrofit2.Call
@@ -84,6 +85,7 @@ class MainActivity : AppCompatActivity() {
             ad.dismiss()
         }
         var kakaologinBtn = view.findViewById<ImageButton>(R.id.login_kakao)
+
         kakaologinBtn.setOnClickListener {
             // 카카오톡으로 로그인
             UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
