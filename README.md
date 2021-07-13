@@ -1,3 +1,4 @@
+
 # MadCamp Week2: Holly Molly
 
 ### 팀원
@@ -12,7 +13,13 @@
 >
 > <b>Backend</b>는 Visual Studio Code에서 Javascript언어로 개발. NodeJS에서 Express, Socket.io, MongoDB를 이용했음.
 
+## App Logo
+<img src="https://user-images.githubusercontent.com/79245586/125461762-7f1a1935-f9bc-462c-9777-3de7a314ecf0.png">
+
+Holly Molly의 트레이드마크인 아보카도를 로고에 사용하였다.
+
 ## Main Screen
+<img src="https://user-images.githubusercontent.com/79245586/125462255-da6e6723-d3eb-4581-ab68-dedbc655ff79.gif" width="20%"> <img src="https://user-images.githubusercontent.com/79245586/125462325-873262a7-83b1-4def-a170-0b3de2af0436.gif" width="20%">
 
 > Sign up, Log in 기능을 구현하였음. 카카오SDK를 활용해 카카오 계정 또한 연동이 됨.
 > 
@@ -20,6 +27,7 @@
 
 
 ## Waiting Room
+<img src="https://user-images.githubusercontent.com/79245586/125462715-e33f01b5-762f-409f-a3ff-970dd7ba85c5.gif" width="20%"> <img src="https://user-images.githubusercontent.com/79245586/125462808-4143bc2b-8bcd-42e9-b17e-b42c2c87ff99.gif" width="20%">
 
 > 사용자 누적 점수 및 해당 Tier 확인가능.
 >
@@ -29,6 +37,7 @@
 
 
 ## Game
+<img src="https://user-images.githubusercontent.com/79245586/125462908-a776d09d-e592-49cc-a1a6-68d21c7a46ae.gif" width="20%"> <img src="https://user-images.githubusercontent.com/79245586/125462917-859739b6-d4e2-4f60-933b-4b8079f98903.gif" width="20%">
 
 > 덱(deck)의 수가 0이 되는 참가자, 혹은 정해둔 턴이 모두 지났을 때 남은 덱의 수가 가장 작은 참가자가 패배하며 패배한 사람은 누적점수 -10, 나머지는 +10점이 된다.
 >
