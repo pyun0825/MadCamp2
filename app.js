@@ -9,8 +9,8 @@ const url = 'mongodb://localhost:27017';
 
 app.use(express.json());
 
-const server = app.listen(3000, () => {
-    console.log("Listening on port 3000....");
+const server = app.listen(443, () => {
+    console.log("Listening on port 443....");
 });
 
 const io = socket(server);

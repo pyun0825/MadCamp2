@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="20dp"
     tools:context=".CreateRoomDialogFragment">
 
     <TextView
@@ -25,19 +26,17 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:fontFamily="@font/lemon_milk"
-        android:hint="Room Name"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_create_title" />
+        app:layout_constraintTop_toBottomOf="@id/et_room_name3" />
 
-    <EditText
-        android:id="@+id/et_room_num"
+    <TextView
+        android:id="@+id/et_room_name2"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -45,37 +44,106 @@
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:fontFamily="@font/lemon_milk"
-        android:hint="Number of players"
-        android:inputType="numberDecimal"
+        android:inputType="textPersonName"
+        android:text="Number of players"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_room_name" />
+
+    <TextView
+        android:id="@+id/et_room_name3"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:ems="10"
+        android:fontFamily="@font/lemon_milk"
+        android:inputType="textPersonName"
+        android:text="room name"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_create_title" />
+
+    <TextView
+        android:id="@+id/et_room_name4"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:ems="10"
+        android:fontFamily="@font/lemon_milk"
+        android:inputType="textPersonName"
+        android:text="Number of turns"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_room_num" />
+
+    <RadioGroup
+        android:id="@+id/et_room_num"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_room_name2">
+
+        <RadioButton
+            android:id="@+id/radio0"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:fontFamily="@font/lemon_milk"
+            android:text="2" />
+
+        <RadioButton
+            android:id="@+id/radio1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/lemon_milk"
+            android:text="3" />
+
+        <RadioButton
+            android:id="@+id/radio2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/lemon_milk"
+            android:text="4" />
+
+    </RadioGroup>
 
     <EditText
         android:id="@+id/et_turn"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:fontFamily="@font/lemon_milk"
-        android:hint="Number of turns"
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_room_num" />
+        app:layout_constraintTop_toBottomOf="@+id/et_room_name4" />
 
     <Button
         android:id="@+id/bt_room_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/lemonmilk_bold"
         android:text="submit"
         app:backgroundTint="#4CAF50"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/et_turn"
         app:layout_constraintTop_toBottomOf="@+id/et_turn" />
 
@@ -83,11 +151,10 @@
         android:id="@+id/bt_room_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/lemonmilk_bold"
         android:text="cancel"
         app:backgroundTint="#F44336"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/et_turn"
         app:layout_constraintTop_toBottomOf="@+id/et_turn" />
 

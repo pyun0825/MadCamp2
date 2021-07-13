@@ -7,9 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.DialogFragment
 import retrofit2.Call
 import retrofit2.Callback
@@ -29,7 +27,8 @@ class CreateRoomDialogFragment(context: Context, var retrofitInterface: Retrofit
         val cancelBtn = RootView.findViewById<Button>(R.id.bt_room_cancel)
         val createBtn = RootView.findViewById<Button>(R.id.bt_room_submit)
         val roomName = RootView.findViewById<EditText>(R.id.et_room_name)
-        val numPlayer = RootView.findViewById<EditText>(R.id.et_room_num)
+//        val numPlayer = RootView.findViewById<EditText>(R.id.et_room_num)
+        val numPlayer = RootView.findViewById<RadioGroup>(R.id.et_room_num)
         val turnNum = RootView.findViewById<EditText>(R.id.et_turn)
 
         cancelBtn.setOnClickListener {
@@ -39,7 +38,7 @@ class CreateRoomDialogFragment(context: Context, var retrofitInterface: Retrofit
         createBtn.setOnClickListener {
             var map: HashMap<String, Any> = HashMap()
             map.put("name", roomName.text.toString())
-            map.put("num_player", numPlayer.text.toString().toInt())
+            map.put("num_player", RootView.findViewById<RadioButton>(numPlayer.checkedRadioButtonId).text.toString().toInt())
             map.put("turn", turnNum.text.toString().toInt())
             val call: Call<Void> = retrofitInterface.makeRoom(map)
             call.enqueue(object: Callback<Void>{
