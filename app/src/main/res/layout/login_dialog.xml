@@ -12,8 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:layout_marginBottom="20dp"
+        android:fontFamily="@font/lemon_milk"
         android:gravity="center_horizontal"
-        android:text="로그인"
+        android:text="Log In"
         android:textSize="30sp"
         android:textStyle="bold" />
 
@@ -22,13 +23,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:hint="Enter ID"/>
+        android:fontFamily="@font/lemon_milk"
+        android:hint="Enter ID" />
 
     <EditText
         android:id="@+id/passwordEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:fontFamily="@font/lemon_milk"
         android:hint="Enter password"
         android:inputType="textPassword" />
 
@@ -37,7 +40,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:text="Log in" />
+        android:fontFamily="@font/lemonmilk_bold"
+        android:text="Log in"
+        app:backgroundTint="#70AD47" />
 
     <View
         android:layout_width="match_parent"
