@@ -19,8 +19,7 @@ import java.lang.System.currentTimeMillis
 class GameActivity : AppCompatActivity() {
     var roomName = ""
     var my_game_id = ""
-    var turn_num = 0
-    var first_turn = 0
+    var recent_turn_num = 0
     var fruitNum = 0
     var fruit = 0
     var turnPlayer = ""
@@ -96,95 +95,92 @@ class GameActivity : AppCompatActivity() {
                 fanim.add(AnimatorSet())
                 banim.add(AnimatorSet())
             }
+            for (i in 0 until N){
+                deck_pos.add(Pair(from_card[i].x, from_card[i].y))
+                open_pos.add(Pair(to_card[i].x, to_card[i].y))
+            }
+            setanim(fanim[0], banim[0], front_card[0], back_card[0], deck_pos[0], deck_pos[0], open_pos[0], "Y")
+            if (N==4) {
+                for (i in 1 until 4) {
+                    setanim(fanim[i], banim[i], front_card[i], back_card[i], deck_pos[i], deck_pos[i], open_pos[i], "X")
+                }
+            } else {
+                setanim(fanim[1], banim[1], front_card[1], back_card[1], deck_pos[1], deck_pos[1], open_pos[1], "Y", -1)
+                if (N==3) {
+                    setanim(fanim[2], banim[2], front_card[2], back_card[2], deck_pos[2], deck_pos[2], open_pos[2], "Y")
+                }
+            }
+        }
 
-            mSocket.on("turn"){ args->
-                runOnUiThread {
-                    System.out.println("turn_num, N : "+turn_num+N)
-                    if (turn_num>N) {
-                        for (i in to_card) {i.visibility = View.VISIBLE}
-                    }
-                    for (i in front_card) {i.bringToFront()}
-                    for (i in back_card) {i.bringToFront()}
+        mSocket.on("turn"){ args->
+            runOnUiThread {
+                System.out.println("recent_turn_num, N : "+recent_turn_num+N)
+                if (recent_turn_num>N) {
+                    for (i in to_card) {i.visibility = View.VISIBLE}
                 }
-                if (first_turn==0) {
-                    for (i in 0 until N){
-                        deck_pos.add(Pair(from_card[i].x, from_card[i].y))
-                        open_pos.add(Pair(to_card[i].x, to_card[i].y))
-                    }
-                    setanim(fanim[0], banim[0], front_card[0], back_card[0], deck_pos[0], deck_pos[0], open_pos[0], "Y")
-                    if (N==4) {
-                        for (i in 1 until 4) {
-                            setanim(fanim[i], banim[i], front_card[i], back_card[i], deck_pos[i], deck_pos[i], open_pos[i], "X")
-                        }
-                    } else {
-                        setanim(fanim[1], banim[1], front_card[1], back_card[1], deck_pos[1], deck_pos[1], open_pos[1], "Y", -1)
-                        if (N==3) {
-                            setanim(fanim[2], banim[2], front_card[2], back_card[2], deck_pos[2], deck_pos[2], open_pos[2], "Y")
-                        }
-                    }
-                    first_turn = 1
-                }
-                turn_num++
-                fruit = args[0] as Int
-                fruitNum = args[1] as Int
-                turnPlayer = args[2] as String
-                is_five = args[3] as Int
-                turn_i = id_map[turnPlayer] as Int
-                emitted = 0
-                System.out.println("Fruit: ${fruit} Num: ${fruitNum} Player: ${turnPlayer} Playid: ${turn_i}")
-                num_close_cards[turn_i]--
-                num_open_cards[turn_i]++
-                updateText()
-                runOnUiThread {
-                    to_card[turn_i].setImageResource(drawid[turn_i])
-                    drawid[turn_i] = card_list[fruit * 5 + fruitNum]
-                    front_card[turn_i].setImageResource(drawid[turn_i])
-                    fanim[turn_i].start()
-                    banim[turn_i].start()
-                }
-                start_time = currentTimeMillis()
+                for (i in front_card) {i.bringToFront()}
+                for (i in back_card) {i.bringToFront()}
+            }
+            recent_turn_num++
+            fruit = args[0] as Int
+            fruitNum = args[1] as Int
+            turnPlayer = args[2] as String
+            is_five = args[3] as Int
+            turn_i = id_map[turnPlayer] as Int
+            emitted = 0
+            System.out.println("Fruit: ${fruit} Num: ${fruitNum} Player: ${turnPlayer} Playid: ${turn_i}")
+            num_close_cards[turn_i]--
+            num_open_cards[turn_i]++
+            updateText()
+            runOnUiThread {
+                to_card[turn_i].setImageResource(drawid[turn_i])
+                drawid[turn_i] = card_list[fruit * 5 + fruitNum]
+                front_card[turn_i].setImageResource(drawid[turn_i])
+                fanim[turn_i].start()
+                banim[turn_i].start()
+            }
+            start_time = currentTimeMillis()
 
 
-                // 해당 플레이어 카드 draw
+            // 해당 플레이어 카드 draw
 //                if(turnPlayer == my_game_id){
 //                    mSocket.emit("bell", my_game_id)
 //                }
-            }
-            mSocket.on("turnend") { args ->
-                runOnUiThread {
-                    if (args[0] == null) {
-                        Toast.makeText(this, "Nobody rang the bell.", Toast.LENGTH_SHORT).show()
-                    } else {
-                        fastest = args[0] as String
-                        Toast.makeText(this, "Player ${fastest} was the fastest!", Toast.LENGTH_SHORT).show()
-                        var j:Int = id_map[fastest]!!
-                        var flipfanim: AnimatorSet = AnimatorSet()
-                        var flipbanim: AnimatorSet = AnimatorSet()
-                        var movefanim: AnimatorSet = AnimatorSet()
-                        var movebanim: AnimatorSet = AnimatorSet()
-                        for (i in 0 until N) {
+        }
+        mSocket.on("turnend") { args ->
+            recent_turn_num = 0
+            runOnUiThread {
+                if (args[0] == null) {
+//                        Toast.makeText(this, "Nobody rang the bell.", Toast.LENGTH_SHORT).show()
+                } else {
+                    fastest = args[0] as String
+                    Toast.makeText(this, "Player ${fastest} was the fastest!", Toast.LENGTH_SHORT).show()
+                    var j:Int = id_map[fastest]!!
+                    var flipfanim: AnimatorSet = AnimatorSet()
+                    var flipbanim: AnimatorSet = AnimatorSet()
+                    var movefanim: AnimatorSet = AnimatorSet()
+                    var movebanim: AnimatorSet = AnimatorSet()
+                    for (i in 0 until N) {
 //                            back_card[i].x = to_card[i].x
 //                            back_card[i].y = to_card[i].y
 //                            front_card[i].x = to_card[i].x
 //                            front_card[i].y = to_card[i].y
-                            if (num_open_cards[i] > 0) {
-                                setanim(movefanim, movebanim, back_card[i], front_card[i], deck_pos[i], open_pos[i], open_pos[i], "Y", dur = 100)
-                                setanim(flipfanim, flipbanim, back_card[i], front_card[i], deck_pos[i], open_pos[i], deck_pos[j], "", dur = 100, del = 200)
-                            }
+                        if (num_open_cards[i] > 0) {
+                            setanim(movefanim, movebanim, back_card[i], front_card[i], deck_pos[i], open_pos[i], open_pos[i], "Y", dur = 100)
+                            setanim(flipfanim, flipbanim, back_card[i], front_card[i], deck_pos[i], open_pos[i], deck_pos[j], "", dur = 100, del = 200)
                         }
-                        for (i in 0 until N) {
-                            num_close_cards[j] += num_open_cards[i]
-                            num_open_cards[i] = 0
-                        }
-                        from_card[j].bringToFront()
-                        for (i in to_card) {i.visibility = View.INVISIBLE}
-                        turn_num = 0
-                        movefanim.start()
-                        movebanim.start()
-                        flipfanim.start()
-                        flipbanim.start()
-                        updateText()
                     }
+                    for (i in 0 until N) {
+                        num_close_cards[j] += num_open_cards[i]
+                        num_open_cards[i] = 0
+                    }
+                    from_card[j].bringToFront()
+                    for (i in to_card) {i.visibility = View.INVISIBLE}
+                    movefanim.start()
+                    movebanim.start()
+                    flipfanim.start()
+                    flipbanim.start()
+                    updateText()
                 }
             }
         }
@@ -263,7 +259,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     fun onClickDrawAll(i: Int) {
-        if (turn_num==1) {Toast.makeText(this, "Player ${i+1} Draw!", Toast.LENGTH_SHORT).show()}
+        if (recent_turn_num==1) {Toast.makeText(this, "Player ${i+1} Draw!", Toast.LENGTH_SHORT).show()}
         fanim[i].start()
         banim[i].start()
     }
