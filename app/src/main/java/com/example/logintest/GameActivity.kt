@@ -7,18 +7,21 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import io.socket.client.Socket
 import org.json.JSONArray
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.lang.System.currentTimeMillis
 
 class GameActivity : AppCompatActivity() {
     var roomName = ""
     var my_game_id = ""
+    var turn_num = 0
     var recent_turn_num = 0
     var fruitNum = 0
     var fruit = 0
@@ -32,6 +35,7 @@ class GameActivity : AppCompatActivity() {
     var id_map = mutableMapOf<String, Int>()
     var num_open_cards = intArrayOf(0, 0, 0, 0)
     var num_close_cards = intArrayOf(0, 0, 0, 0)
+    var total_turn_num: Int = 0
     var drawid = intArrayOf(R.drawable.card_empty, R.drawable.card_empty, R.drawable.card_empty, R.drawable.card_empty)
     var card_list = intArrayOf(R.drawable.card_apple_1, R.drawable.card_apple_2, R.drawable.card_apple_3, R.drawable.card_apple_4, R.drawable.card_apple_5
         , R.drawable.card_avocado_1, R.drawable.card_avocado_2, R.drawable.card_avocado_3, R.drawable.card_avocado_4, R.drawable.card_avocado_5
@@ -41,6 +45,7 @@ class GameActivity : AppCompatActivity() {
     var open_pos: MutableList<Pair<Float, Float>> = mutableListOf()
     var fanim: MutableList<AnimatorSet> = mutableListOf()
     var banim: MutableList<AnimatorSet> = mutableListOf()
+    lateinit var tv_leftturn: TextView
     lateinit var back_card: MutableList<ImageView>
     lateinit var front_card: MutableList<ImageView>
     lateinit var to_card: MutableList<ImageView>
@@ -72,6 +77,7 @@ class GameActivity : AppCompatActivity() {
             var jArray:JSONArray = args[0] as JSONArray
             System.out.println(args[1])
             var dArray:JSONObject = JSONObject(args[1] as String)
+            total_turn_num = args[2] as Int
             System.out.println(dArray)
             System.out.println(args)
             System.out.println(jArray)
@@ -122,6 +128,7 @@ class GameActivity : AppCompatActivity() {
                 for (i in back_card) {i.bringToFront()}
             }
             recent_turn_num++
+            turn_num++
             fruit = args[0] as Int
             fruitNum = args[1] as Int
             turnPlayer = args[2] as String
@@ -185,6 +192,26 @@ class GameActivity : AppCompatActivity() {
             }
         }
 
+        mSocket.on("game over") { args ->
+            var loser = args[0] as String
+            var my_cards = num_close_cards[id_map[my_game_id]!!]
+            var resultstr = ""
+            var place = 1
+            for (i in players) {
+                if (num_close_cards[id_map[i]!!] > my_cards) {
+                    place++
+                }
+                resultstr += "${i} : ${num_close_cards[id_map[i]!!]}\n"
+            }
+            if (my_game_id == loser) {
+                resultstr += "Lost 10 points..."
+            } else {
+                resultstr += "Gained 10 points!"
+            }
+            val dialog = GameoverFragment(place, resultstr)
+            dialog.show(supportFragmentManager, "GameOverDialog")
+        }
+
         if (N==2) {
             setContentView(R.layout.activity_game_2)
         } else if (N==3) {
@@ -193,7 +220,7 @@ class GameActivity : AppCompatActivity() {
             setContentView(R.layout.activity_game_4)
         }
 
-
+        tv_leftturn = findViewById(R.id.tv_leftturn)
         back_card = mutableListOf(findViewById(R.id.iv_DeckView)!!, findViewById(R.id.iv_DeckView2)!!)
         front_card = mutableListOf(findViewById(R.id.iv_myDeck)!!, findViewById(R.id.iv_Deck2)!!)
         from_card = mutableListOf(findViewById(R.id.iv_drawCard)!!, findViewById(R.id.iv_drawCard2)!!)
@@ -343,9 +370,12 @@ class GameActivity : AppCompatActivity() {
     }
 
     fun updateText() {
-        for (i in players) {
-            var j: Int = id_map[i]!!
-            tv_stat[j].setText("ID: ${i}\nCARDS: ${num_close_cards[j]}")
+        runOnUiThread {
+            for (i in players) {
+                var j: Int = id_map[i]!!
+                tv_stat[j].setText("ID: ${i}\nCARDS: ${num_close_cards[j]}")
+            }
+            tv_leftturn.setText((total_turn_num - turn_num).toString())
         }
     }
 }
