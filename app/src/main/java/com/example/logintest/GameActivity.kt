@@ -92,6 +92,7 @@ class GameActivity : AppCompatActivity() {
                     players.add(jArray.getString(i))
                 }
             }
+            System.out.println(id2name)
             System.out.println(players)
 
             for (i in 0 until N) {

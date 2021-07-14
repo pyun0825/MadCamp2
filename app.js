@@ -9,8 +9,8 @@ const url = 'mongodb://localhost:27017';
 
 app.use(express.json());
 
-const server = app.listen(443, () => {
-    console.log("Listening on port 443....");
+const server = app.listen(3000, () => {
+    console.log("Listening on port 3000....");
 });
 
 const io = socket(server);
@@ -114,24 +114,32 @@ mongoClient.connect(url, (err, db) => {
                 const roomName = arg1;
                 const num_player = arg2;
                 var turnNum = 56;
+                console.log(arg2);
                 count++;
                 console.log("Socket: "+socket.nickname+" Count: ",count);
                 if(count == num_player){
                     var player_list;
+                    var player_name_list = [];
                     collection2.findOne({name: roomName}, (err, result)=>{
                         turnNum = result.turn;
                         player_list = result.player_list;
+
                         for(i in player_list){
                             var player = player_list[i];
+                            collection.findOne({game_id: player}, (err, result) =>{
+                                player_name_list.push(result.name)
+                            });
                             const update = {
                                 $set: {[`deck.${player}.notOpen`]: 56/num_player, [`deck.${player}.Open`]: 0}
                             };
                             collection3.updateOne({name: roomName}, update);
                         };
                     });
+                    console.log("emitting test");
                     count = 0;
                     setTimeout(function(){
                         console.log(player_list);
+
                         var cards = [
                             [5,3,3,2,1],
                             [5,3,3,2,1],
@@ -139,9 +147,11 @@ mongoClient.connect(url, (err, db) => {
                             [5,3,3,2,1]
                         ];
                         var init_deck;
+
                         collection3.findOne({name: roomName}, (err, result) => {
                             init_deck = result.deck;
-                            io.to(roomName).emit('initial turn', player_list, JSON.stringify(init_deck), turnNum);
+                            console.log("deck: "+init_deck)
+                            io.to(roomName).emit('initial turn', player_list, player_name_list, JSON.stringify(init_deck), turnNum);
                         })
                         setTimeout(async function(){
                             var opencards = [];
@@ -218,6 +228,7 @@ mongoClient.connect(url, (err, db) => {
                                         };
                                     };
                                 });
+                                console.log(loser);
                                 await timer(1000);
                             };
                             if(loser != null){
@@ -227,6 +238,7 @@ mongoClient.connect(url, (err, db) => {
                                             $inc: {score: -10}
                                         });
                                     } else {
+                                        console.log(player_list[i])
                                         collection.updateOne({game_id: player_list[i]}, {
                                             $inc: {score: 10}
                                         });
@@ -240,6 +252,7 @@ mongoClient.connect(url, (err, db) => {
                                             $inc: {score: -10}
                                         });
                                     } else {
+                                        console.log(player_list[i])
                                         collection.updateOne({game_id: player_list[i]}, {
                                             $inc: {score: 10}
                                         });
@@ -268,8 +281,13 @@ mongoClient.connect(url, (err, db) => {
                     };
                     collection2.updateOne(query, newValue);
                 });
-
             });
+            socket.on('wrongring', ()=>{
+                setTimeout(async function(){
+                    await timer(10000)
+                    socket.emit('wrongring done')
+                })
+            })
         });
         app.post('/signup', (req, res)=>{
             console.log("Signing up");
@@ -336,7 +354,7 @@ mongoClient.connect(url, (err, db) => {
         app.get('/rooms', (req, res)=>{
             console.log("Finding rooms...");
             const query = {
-                $where : "this.cur_player != this.num_player"
+                $where : "this.cur_player < this.num_player"
             };
             collection2.find(query).toArray(function(err, docs)  {
                 res.status(200).send(JSON.stringify(docs))
